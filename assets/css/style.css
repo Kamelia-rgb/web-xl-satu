@@ -395,3 +395,173 @@ textarea { min-height: 100px; resize: vertical; }
 }
 @media (max-width: 480px) { .wa-float-label { display: none; } .wa-float { padding: 14px; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* =========================================================
+   Bagian baru beranda (gaya brosur) + animasi gulir
+   ========================================================= */
+.eyebrow-light { background: rgba(255,255,255,.16); color: #fff; }
+
+/* ---------- Kotak kecepatan + harga di hero ---------- */
+.hero-offer-wrap { position: relative; }
+.hero-offer { display: flex; align-items: stretch; margin-right: 12px; filter: drop-shadow(0 18px 30px rgba(0,0,0,.28)); }
+.offer-speed {
+  position: relative; z-index: 1; flex: 0 0 auto; color: #fff;
+  background: linear-gradient(135deg, #17a08e, #0d6e73); border: 4px solid #5fd3c2;
+  border-radius: 26px; padding: 14px 34px 14px 26px; margin-right: -22px;
+  transform: skewX(-6deg);
+}
+.offer-speed > * { display: inline-block; transform: skewX(6deg); }
+.offer-speed span { display: block; font-weight: 600; font-size: .95rem; }
+.offer-speed strong { font-size: clamp(3.4rem, 8vw, 4.8rem); font-weight: 800; line-height: .95; letter-spacing: -.04em; font-style: italic; }
+.offer-speed em { font-style: normal; font-weight: 700; font-size: 1.15rem; margin-left: 4px; }
+.offer-price {
+  flex: 1; display: flex; align-items: center; gap: 6px; background: #fff; color: #135c84;
+  border: 4px solid #5fd3c2; border-radius: 26px; padding: 12px 18px 12px 38px; transform: skewX(-6deg);
+}
+.offer-price > * { transform: skewX(6deg); }
+.offer-only { font-weight: 700; font-style: italic; line-height: 1.1; text-align: right; font-size: 1rem; }
+.offer-only small { font-size: .95rem; }
+.offer-price strong { font-size: clamp(2.6rem, 6vw, 3.6rem); font-weight: 800; font-style: italic; letter-spacing: -.04em; line-height: 1; }
+.offer-rest { font-weight: 800; font-style: italic; font-size: 1.35rem; line-height: 1; }
+.offer-rest small { font-size: .85rem; font-weight: 700; }
+.hero-offer-meta { margin-top: 22px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); border-radius: 18px; padding: 18px 20px; }
+.hero-offer-meta p { margin: 0 0 8px; color: rgba(255,255,255,.9); }
+.hero-offer-meta ul { list-style: none; padding: 0; margin: 0 0 14px; display: flex; flex-wrap: wrap; gap: 6px 16px; color: #fff; font-weight: 600; font-size: .92rem; }
+.hero-offer-meta li::before { content: "✓ "; color: var(--accent); }
+@media (max-width: 480px) {
+  .offer-speed { padding: 12px 26px 12px 18px; }
+  .offer-price { padding: 10px 12px 10px 30px; }
+}
+
+/* ---------- Sekali bayar (gaya brosur rumah) ---------- */
+.sb-section { color: #fff; background: radial-gradient(circle at 90% 10%, rgba(80,140,255,.45), transparent 40%), linear-gradient(160deg, #0a3fcf 0%, #0b2fa0 55%, #0a2580 100%); overflow: hidden; }
+.sb-section h2, .sb-head p { color: #fff; }
+.sb-head p { opacity: .85; }
+.sb-house { position: relative; max-width: 980px; margin: 70px auto 0; padding: 24px 22px 26px; border: 4px solid rgba(120,180,255,.7); border-top: 0; border-radius: 0 0 22px 22px; display: grid; gap: 22px; }
+.sb-roof { position: absolute; left: -4px; right: -4px; top: -68px; width: calc(100% + 8px); height: 70px; overflow: visible; color: rgba(120,180,255,.7); }
+.sb-card { position: relative; display: grid; grid-template-columns: 210px 1fr; align-items: center; gap: 18px; background: rgba(255,255,255,.06); border: 3px solid rgba(255,255,255,.85); border-radius: 22px; padding: 20px 22px; }
+.sb-card.is-best { border-color: #fff; box-shadow: 0 0 0 6px rgba(255,255,255,.08); }
+.sb-best { position: absolute; top: -14px; right: 20px; background: #fff; color: #0b2fa0; font-weight: 800; font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; padding: 5px 12px; border-radius: 999px; transform: rotate(-4deg); box-shadow: 0 6px 14px rgba(0,0,0,.25); }
+.sb-speed span { display: block; font-size: .95rem; opacity: .9; }
+.sb-speed strong { font-size: 5rem; font-weight: 800; line-height: .9; letter-spacing: -.05em; }
+.sb-speed em { font-style: normal; font-weight: 800; background: linear-gradient(135deg, #2bb3c0, #1782b8); padding: 2px 8px; border-radius: 8px; margin-left: 4px; vertical-align: top; position: relative; top: 10px; }
+.sb-speed small { display: block; margin-top: 4px; font-weight: 600; opacity: .85; }
+.sb-deal { margin: 0 0 8px; font-weight: 700; }
+.sb-deal b { font-size: 1.5rem; }
+.sb-row { display: flex; align-items: stretch; background: #eef3ff; border-radius: 14px; color: #0b2a7a; overflow: hidden; }
+.sb-price { padding: 10px 16px; }
+.sb-setara { display: block; font-size: .8rem; font-style: italic; color: #33427a; }
+.sb-price p { margin: 0; line-height: 1; white-space: nowrap; }
+.sb-price sup { font-weight: 700; font-size: 1rem; vertical-align: top; position: relative; top: 6px; margin-right: 2px; }
+.sb-price strong { font-size: 3.4rem; font-weight: 800; letter-spacing: -.04em; }
+.sb-price p span { font-weight: 700; font-style: italic; font-size: 1.15rem; }
+.sb-plus { align-self: center; display: grid; place-items: center; width: 30px; height: 30px; flex: 0 0 30px; border-radius: 50%; background: #0b2fa0; color: #fff; font-weight: 800; font-size: 1.3rem; margin: 0 -6px; z-index: 1; }
+.sb-bonus { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 10px 16px 10px 20px; border-left: 2px solid #c9d6f5; }
+.sb-bonus strong { font-style: italic; font-size: 1.1rem; color: #0b2fa0; }
+.sb-bonus span { font-weight: 700; color: #d2385e; }
+.sb-note { margin: 8px 0 0; font-size: .85rem; font-weight: 600; opacity: .9; }
+.sb-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.sb-terms { max-width: 980px; margin: 22px auto 0; padding-left: 20px; font-size: .88rem; font-style: italic; opacity: .85; }
+@media (max-width: 760px) {
+  .sb-house { padding: 18px 12px; margin-top: 56px; }
+  .sb-roof { top: -52px; height: 56px; }
+  .sb-card { grid-template-columns: 1fr; padding: 22px 16px 18px; }
+  .sb-speed strong { font-size: 4rem; }
+  .sb-row { flex-direction: column; }
+  .sb-plus { margin: -10px auto; }
+  .sb-bonus { border-left: 0; border-top: 2px solid #c9d6f5; padding: 14px 16px 12px; text-align: center; }
+}
+
+/* ---------- Mengapa pilih ---------- */
+.why-section { background: #fff; }
+.why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: center; }
+.why-icon { color: #1554c0; display: flex; justify-content: center; margin-bottom: 12px; }
+.why-item:nth-child(3) .why-icon { color: #0e9f8a; }
+.why-item h3 { color: #1554c0; font-size: 1.25rem; margin-bottom: 10px; }
+.why-item p { font-weight: 600; color: #222; margin: 0; }
+.perks { display: grid; grid-template-columns: repeat(3, 1fr); margin: 44px auto 0; max-width: 900px; background: #fff; border: 3px solid #c9d8f5; border-radius: 18px; box-shadow: var(--shadow); }
+.perk { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 18px 16px; color: #0b2fa0; }
+.perk + .perk { border-left: 2px solid #e1e8f7; }
+.perk strong { display: block; font-weight: 800; }
+.perk span { font-size: .9rem; font-weight: 600; }
+.perk s { color: #8a91a3; margin-right: 4px; }
+@media (max-width: 760px) {
+  .why-grid { grid-template-columns: repeat(2, 1fr); gap: 28px 14px; }
+  .perks { grid-template-columns: 1fr; }
+  .perk { justify-content: flex-start; }
+  .perk + .perk { border-left: 0; border-top: 2px solid #e1e8f7; }
+}
+
+/* ---------- myXL: ikon mengorbit ponsel ---------- */
+.myxl-section { background: #e8f5fb; overflow: hidden; }
+.myxl-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; }
+.orbit-wrap { --r: 200px; position: relative; width: calc(var(--r) * 2 + 120px); max-width: 100%; aspect-ratio: 1; margin: 0 auto; }
+.orbit-ring { position: absolute; inset: 60px; border-radius: 50%; border: 2px solid rgba(21,84,192,.12); box-shadow: inset 0 0 0 40px rgba(255,255,255,.35); }
+.orbit { --rot: 0deg; position: absolute; inset: 0; z-index: 2; transform: rotate(var(--rot)); will-change: transform; }
+.orbit-item { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform: rotate(var(--a)) translateY(calc(var(--r) * -1)) rotate(calc(var(--a) * -1)); }
+.orbit-bubble {
+  position: absolute; left: -46px; top: -46px; width: 92px; height: 92px; border-radius: 50%;
+  background: #fff; box-shadow: 0 8px 22px rgba(16,38,84,.14); color: #1554c0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center;
+  transform: rotate(calc(var(--rot) * -1));
+}
+.orbit-bubble span { font-size: .68rem; font-weight: 800; line-height: 1.1; color: #133a7c; max-width: 76px; }
+.phone {
+  position: absolute; left: 50%; top: 50%; width: 170px; height: 330px; transform: translate(-50%, -50%) rotate(-8deg);
+  background: #1d2433; border-radius: 30px; padding: 9px; box-shadow: 0 24px 40px rgba(16,38,84,.35);
+}
+.phone-notch { position: absolute; top: 12px; left: 50%; width: 52px; height: 12px; margin-left: -26px; background: #1d2433; border-radius: 0 0 8px 8px; z-index: 2; }
+.phone-screen { height: 100%; border-radius: 22px; overflow: hidden; background: linear-gradient(180deg, #0e4fa8 0, #0e4fa8 46%, #f2f6fc 46%); padding: 24px 10px 10px; color: #fff; font-size: 9px; display: flex; flex-direction: column; gap: 7px; }
+.ps-top { display: flex; align-items: center; gap: 6px; }
+.ps-top small { display: block; opacity: .8; }
+.ps-avatar { width: 20px; height: 20px; border-radius: 50%; background: #ffd27a; flex: 0 0 20px; }
+.ps-card { background: rgba(255,255,255,.14); border-radius: 8px; padding: 7px; }
+.ps-menu { display: flex; justify-content: space-between; padding: 0 4px; }
+.ps-menu span { width: 22px; height: 22px; border-radius: 50%; background: #fff; }
+.ps-bill, .ps-plan { background: #fff; color: #133a7c; border-radius: 9px; padding: 7px 8px; box-shadow: 0 2px 6px rgba(0,0,0,.08); display: flex; flex-direction: column; gap: 2px; }
+.ps-bill { background: #12346f; color: #fff; }
+.ps-bill b { font-size: 12px; }
+.ps-bill i { font-style: normal; background: #fff; color: #12346f; border-radius: 999px; text-align: center; padding: 3px; font-weight: 700; margin-top: 3px; }
+.ps-plan b { font-size: 11px; }
+.myxl-text h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); }
+.myxl-text p { font-size: 1.08rem; color: #3b4458; }
+.store-btns { display: flex; gap: 12px; flex-wrap: wrap; margin: 22px 0 26px; }
+.store-btn { display: inline-flex; flex-direction: column; background: #111; color: #fff; text-decoration: none; padding: 8px 18px; border-radius: 10px; font-weight: 700; font-size: 1.1rem; line-height: 1.1; }
+.store-btn small { font-size: .7rem; font-weight: 500; }
+.wa-bubble { display: inline-flex; align-items: center; gap: 14px; background: #1238c9; color: #fff; text-decoration: none; padding: 14px 18px 14px 22px; border-radius: 22px; font-weight: 600; font-size: 1.1rem; max-width: 340px; box-shadow: 0 10px 24px rgba(18,56,201,.3); }
+.wa-bubble svg { flex: 0 0 auto; background: var(--wa); border-radius: 50%; padding: 8px; width: 46px; height: 46px; }
+@media (max-width: 860px) {
+  .myxl-grid { grid-template-columns: 1fr; gap: 10px; }
+  .orbit-wrap { --r: 128px; width: calc(var(--r) * 2 + 96px); }
+  .orbit-bubble { left: -38px; top: -38px; width: 76px; height: 76px; }
+  .orbit-bubble svg { width: 22px; height: 22px; }
+  .orbit-bubble span { font-size: .58rem; max-width: 64px; }
+  .phone { width: 128px; height: 250px; border-radius: 24px; padding: 7px; }
+  .phone-screen { border-radius: 18px; font-size: 7px; padding: 20px 7px 7px; gap: 5px; }
+  .myxl-text { text-align: center; }
+  .store-btns { justify-content: center; }
+}
+
+/* ---------- Bar daftar di bawah layar HP ---------- */
+.sticky-cta { display: none; }
+@media (max-width: 760px) {
+  .sticky-cta {
+    display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 6px 12px;
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 70;
+    background: #e8f5fb; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    box-shadow: 0 -8px 24px rgba(16,38,84,.18); transform: translateY(110%); transition: transform .3s ease;
+  }
+  .sticky-cta.show { transform: none; }
+  .sticky-icon { grid-row: span 1; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 3px solid #1554c0; color: #0e9f8a; background: #fff; }
+  .sticky-cta strong { color: #1554c0; font-size: 1.15rem; line-height: 1.2; }
+  .sticky-cta .btn { grid-column: 1 / -1; width: 100%; background: #0e9f8a; padding: .8em; }
+  body.cta-on .wa-float { opacity: 0; pointer-events: none; }
+}
+
+/* ---------- Animasi muncul saat digulir ---------- */
+.js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; transition-delay: var(--d, 0s); }
+.js .reveal.is-visible { opacity: 1; transform: none; }
+.hero-offer.reveal.is-visible { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal { opacity: 1; transform: none; }
+}

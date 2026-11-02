@@ -21,6 +21,10 @@ return [
     // Teks pemberitahuan di bagian bawah web (penting untuk kebijakan iklan)
     'disclaimer'   => 'Website ini dikelola oleh mitra penjualan layanan XL Satu dan bukan situs resmi XL. Harga dan promo dapat berubah sewaktu-waktu sesuai ketentuan yang berlaku.',
 
+    // ---- Link aplikasi myXL (boleh dikosongkan) ----
+    'link_playstore' => 'https://play.google.com/store/search?q=myXL&c=apps',
+    'link_appstore'  => '',   // isi link App Store myXL supaya tombol App Store muncul
+
     // ---- Database (lihat di cPanel > MySQL Databases) ----
     'db_dsn'       => 'mysql:host=localhost;dbname=NAMA_DATABASE;charset=utf8mb4',
     'db_user'      => 'USER_DATABASE',

@@ -195,6 +195,15 @@ function icon(string $name, int $size = 26): string
         'gauge'   => '<path d="M12 14l3.5-3.5"/><path d="M4.2 18.5a9 9 0 1 1 15.6 0"/><path d="M12 5.5V7M5.5 12H7M17 12h1.5"/>',
         'gift'    => '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13"/><path d="M12 8S10.5 3.5 8 3.5a2.2 2.2 0 0 0 0 4.5h4Zm0 0s1.5-4.5 4-4.5a2.2 2.2 0 0 1 0 4.5h-4Z"/>',
         'edit'    => '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+        'bolt'    => '<circle cx="12" cy="13.5" r="8"/><path d="M10 2.5h4M12 2.5v3"/><path d="M13 9l-3 5h4l-3 5"/>',
+        'pin'     => '<path d="M12 21s-6-5.5-6-10.5a6 6 0 0 1 12 0C18 15.5 12 21 12 21Z"/><circle cx="12" cy="10.5" r="2.2"/><path d="M4.5 6.5a9 9 0 0 0 0 8M19.5 6.5a9 9 0 0 1 0 8"/>',
+        'plusbox' => '<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 8v8M8 12h8"/>',
+        'users'   => '<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2A5 5 0 0 1 21 19"/>',
+        'percent' => '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 16l8-8"/><circle cx="8.5" cy="8.5" r="1.4"/><circle cx="15.5" cy="15.5" r="1.4"/>',
+        'list'    => '<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8.5l1.2 1.2L11.5 7.5M13.5 9h3M8 14.5l1.2 1.2 2.3-2.2M13.5 15h3"/>',
+        'coin'    => '<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10.5h18"/><circle cx="15.5" cy="15" r="1.6"/>',
+        'hourglass' => '<path d="M6 3h12M6 21h12"/><path d="M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/>',
+        'headset' => '<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="2.5" y="14" width="4" height="6" rx="1.5"/><rect x="17.5" y="14" width="4" height="6" rx="1.5"/>',
     ];
     return '<svg viewBox="0 0 24 24" width="' . $size . '" height="' . $size . '" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . ($paths[$name] ?? '') . '</svg>';
 }
@@ -248,5 +257,187 @@ function render_cta(): void
       </div>
       <a class="btn btn-accent" href="<?= e(wa_link('Halo, saya mau cek apakah alamat saya bisa dipasang internet ' . config('site_name') . '.')) ?>" target="_blank" rel="noopener" data-track="wa">Cek Area via WhatsApp</a>
     </div>
+    <?php
+}
+
+/** "Rp254" + ".000" untuk tampilan harga besar ala brosur. */
+function harga_pecah(int $harga): array
+{
+    return [number_format(intdiv($harga, 1000), 0, ',', '.'), '.' . str_pad((string) ($harga % 1000), 3, '0', STR_PAD_LEFT)];
+}
+
+/** Kotak kecepatan + harga di bagian atas beranda. */
+function render_hero_offer(array $p): void
+{
+    [$ribu, $sisa] = harga_pecah((int) $p['harga']);
+    $periode = (int) $p['periode_bulan'] > 1 ? '/' . (int) $p['periode_bulan'] . ' bln' : '/bln';
+    ?>
+    <div class="hero-offer reveal">
+      <div class="offer-speed">
+        <span>Kecepatan Hingga</span>
+        <strong><?= (int) $p['kecepatan'] ?></strong><em>Mbps</em>
+      </div>
+      <div class="offer-price">
+        <span class="offer-only">Hanya<br><small>Rp</small></span>
+        <strong><?= e($ribu) ?></strong>
+        <span class="offer-rest"><?= e($sisa) ?><br><small><?= e($periode) ?><?= $p['ppn_termasuk'] ? '' : '*' ?></small></span>
+      </div>
+    </div>
+    <div class="hero-offer-meta reveal">
+      <p><strong><?= e($p['nama']) ?></strong> · <?= e($p['kategori']) ?><?= $p['label'] ? ' · ' . e($p['label']) : '' ?></p>
+      <ul>
+        <li><?= (int) $p['biaya_instalasi'] > 0 ? 'Instalasi ' . e(rupiah($p['biaya_instalasi'])) : 'Gratis instalasi' ?></li>
+        <li>Hingga <?= paket_perangkat($p) ?> perangkat</li>
+        <li><?= $p['ppn_termasuk'] ? 'Termasuk PPN 11%' : '*Belum termasuk PPN' ?></li>
+      </ul>
+      <a class="btn btn-accent" href="<?= e(wa_link(wa_message_paket($p))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e(paket_judul($p)) ?>">Ambil Paket Ini</a>
+    </div>
+    <?php
+}
+
+/** Bagian "Paket Sekali Bayar, Lebih Untung" (paket dengan periode lebih dari 1 bulan). */
+function render_sekali_bayar(array $paket): void
+{
+    $list = array_values(array_filter($paket, function ($p) { return (int) $p['periode_bulan'] > 1; }));
+    if (!$list) {
+        return;
+    }
+    ?>
+    <section class="section sb-section" id="sekali-bayar">
+      <div class="container">
+        <div class="section-head sb-head">
+          <span class="eyebrow eyebrow-light">Paket Sekali Bayar</span>
+          <h2>Sekali Bayar, Lebih Untung!</h2>
+          <p>Bayar di muka untuk beberapa bulan sekaligus, lebih hemat dan dapat bonus nonton.</p>
+        </div>
+        <div class="sb-house">
+          <svg class="sb-roof" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M3 118 L175 8 L345 118 M300 89 L445 8 L597 118" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <?php foreach ($list as $i => $p):
+              $n = (int) $p['periode_bulan'];
+              $hemat = (!empty($p['harga_coret']) && $p['harga_coret'] > $p['harga']) ? (int) round(($p['harga_coret'] - $p['harga']) / $p['harga_coret'] * 100) : 0;
+              [$ribu, $sisa] = harga_pecah((int) $p['harga']);
+              $bonus = (string) $p['bonus'];
+              $bonusTitle = $bonus; $bonusDetail = '';
+              if (strpos($bonus, ':') !== false) {
+                  [$bonusTitle, $bonusDetail] = array_map('trim', explode(':', $bonus, 2));
+              }
+          ?>
+          <article class="sb-card reveal<?= $i === 0 ? ' is-best' : '' ?>">
+            <?php if ($i === 0): ?><span class="sb-best">Best Choice</span><?php endif; ?>
+            <div class="sb-speed">
+              <span>Kecepatan Hingga</span>
+              <strong><?= (int) $p['kecepatan'] ?></strong><em>Mbps</em>
+              <small><?= e($p['nama']) ?></small>
+            </div>
+            <div class="sb-main">
+              <p class="sb-deal">Sekali Bayar <b><?= $n ?></b> Bulan<?php if ($hemat): ?> Lebih Hemat <b><?= $hemat ?>%</b><?php endif; ?></p>
+              <div class="sb-row">
+                <div class="sb-price">
+                  <?php if ($hemat): ?><span class="sb-setara">Setara nilai <?= e(rupiah($p['harga_coret'])) ?></span><?php endif; ?>
+                  <p><sup>Rp</sup><strong><?= e($ribu) ?></strong><span><?= e($sisa) ?>*</span></p>
+                </div>
+                <?php if ($bonus !== ''): ?>
+                  <span class="sb-plus" aria-hidden="true">+</span>
+                  <div class="sb-bonus">
+                    <strong><?= e($bonusTitle) ?></strong>
+                    <?php if ($bonusDetail !== ''): ?><span><?= e($bonusDetail) ?></span><?php endif; ?>
+                  </div>
+                <?php endif; ?>
+              </div>
+              <?php foreach (lines((string) $p['benefit']) as $b): ?><p class="sb-note">*<?= e($b) ?></p><?php endforeach; ?>
+              <div class="sb-actions">
+                <a class="btn btn-wa btn-sm" href="<?= e(wa_link(wa_message_paket($p))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e(paket_judul($p)) ?>"><?= icon('chat', 16) ?> Chat WA</a>
+                <a class="btn btn-outline-light btn-sm" href="<?= e(url('kontak?paket=' . (int) $p['id'] . '#daftar')) ?>"><?= icon('edit', 16) ?> Isi Form</a>
+              </div>
+            </div>
+          </article>
+          <?php endforeach; ?>
+        </div>
+        <ul class="sb-terms">
+          <li>Pelanggan kembali dikenakan harga normal setelah masa paket/promo habis.</li>
+          <li><?= $list[0]['ppn_termasuk'] ? 'Harga sudah termasuk PPN 11%.' : 'Harga belum termasuk PPN 11%.' ?> Syarat &amp; ketentuan berlaku.</li>
+        </ul>
+      </div>
+    </section>
+    <?php
+}
+
+/** "Mengapa Harus Pilih ..." + strip keuntungan. Ubah teksnya di sini. */
+function render_keunggulan(): void
+{
+    $items = [
+        ['speed', 'Lebih Ngebut', 'Koneksi fiber optik yang andal dan stabil, bahkan di jam sibuk.'],
+        ['bolt', 'Lebih Instan', 'Instalasi cepat, teknisi datang setelah area dinyatakan tercover.'],
+        ['pin', 'Lebih Luas', 'Jaringan tersedia di banyak kota dan terus bertambah.'],
+        ['gift', 'Lebih Untung', 'Bayar sama, speed lebih kencang. Plus bonus nonton!'],
+    ];
+    ?>
+    <section class="section why-section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Mengapa Harus Pilih <?= e(config('site_name')) ?>?</h2>
+        </div>
+        <div class="why-grid">
+          <?php foreach ($items as [$ic, $title, $desc]): ?>
+            <div class="why-item reveal">
+              <div class="why-icon"><?= icon($ic, 64) ?></div>
+              <h3><?= e($title) ?></h3>
+              <p><?= e($desc) ?></p>
+            </div>
+          <?php endforeach; ?>
+        </div>
+        <div class="perks reveal">
+          <div class="perk"><?= icon('tool', 28) ?><div><strong>GRATIS Instalasi</strong><span><s>Rp750.000</s> Rp0,-</span></div></div>
+          <div class="perk"><?= icon('bolt', 28) ?><div><strong>Instalasi Cepat</strong><span>Langsung dijadwalkan</span></div></div>
+          <div class="perk"><?= icon('headset', 28) ?><div><strong>24/7</strong><span>Customer Support</span></div></div>
+        </div>
+      </div>
+    </section>
+    <?php
+}
+
+/** Bagian aplikasi myXL dengan ikon yang berputar mengelilingi ponsel saat digulir. */
+function render_myxl(?array $p): void
+{
+    $items = [
+        ['plusbox', 'Tambah Layanan'], ['coin', 'Bayar Tagihan'], ['users', 'Tambah Anggota'],
+        ['percent', 'Promo Spesial'], ['headset', 'Call Center'], ['list', 'Kelola Paket'],
+    ];
+    $play = (string) config('link_playstore', 'https://play.google.com/store/search?q=myXL&c=apps');
+    $appstore = (string) config('link_appstore', '');
+    ?>
+    <section class="section myxl-section" data-orbit-section>
+      <div class="container myxl-grid">
+        <div class="orbit-wrap" aria-hidden="true">
+          <div class="orbit-ring"></div>
+          <div class="orbit">
+            <?php foreach ($items as $i => [$ic, $label]): ?>
+              <div class="orbit-item" style="--a: <?= $i * 60 ?>deg"><div class="orbit-bubble"><?= icon($ic, 28) ?><span><?= e($label) ?></span></div></div>
+            <?php endforeach; ?>
+          </div>
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="ps-top"><span class="ps-avatar"></span><div><b>Halo, Pelanggan</b><small>0817 xxxx xxxx</small></div></div>
+              <div class="ps-card"><small>Upgrade plan kamu dan dapatkan penawaran menarik!</small></div>
+              <div class="ps-menu"><span></span><span></span><span></span><span></span></div>
+              <div class="ps-bill"><small>Tagihan periode ini</small><b><?= $p ? e(rupiah($p['harga'])) : 'Rp0' ?></b><i>Atur Autodebit</i></div>
+              <div class="ps-plan"><small>Plan Saya</small><b><?= $p ? e($p['nama']) : config('site_name') ?></b><small>Kecepatan hingga <?= $p ? (int) $p['kecepatan'] : 0 ?> Mbps</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="myxl-text reveal">
+          <h2>Kelola Internet Rumah dari Aplikasi myXL</h2>
+          <p>Bayar tagihan, cek dan kelola paket, tambah anggota keluarga, sampai dapat promo spesial, semua langsung dari smartphone kamu.</p>
+          <div class="store-btns">
+            <?php if ($appstore !== ''): ?><a class="store-btn" href="<?= e($appstore) ?>" target="_blank" rel="noopener"><small>Download di</small>App Store</a><?php endif; ?>
+            <a class="store-btn" href="<?= e($play) ?>" target="_blank" rel="noopener"><small>Tersedia di</small>Google Play</a>
+          </div>
+          <a class="wa-bubble" href="<?= e(wa_link('Halo, saya mau daftar internet ' . config('site_name') . ' lewat WhatsApp.')) ?>" target="_blank" rel="noopener" data-track="wa">
+            <span>Yuk daftar lebih cepat dengan WhatsApp!</span><?= icon('chat', 30) ?>
+          </a>
+        </div>
+      </div>
+    </section>
     <?php
 }

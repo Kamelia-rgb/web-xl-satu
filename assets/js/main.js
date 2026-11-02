@@ -95,3 +95,69 @@ document.querySelectorAll('[data-pkg-filter]').forEach(function (wrap) {
     });
   });
 });
+
+// ---------- Animasi: muncul saat digulir ----------
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var selectors = '.section-head, .feature, .pkg, .steps li, .faq details, .cta-band, .promo-card, .slider, .why-item, .perks, .sb-card, .myxl-text, .hero-offer, .hero-offer-meta';
+  var els = Array.prototype.slice.call(document.querySelectorAll(selectors));
+  els.forEach(function (el) {
+    el.classList.add('reveal');
+    // Muncul bergantian untuk elemen yang berdampingan
+    var siblings = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
+    el.style.setProperty('--d', Math.min(siblings, 5) * 0.08 + 's');
+  });
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('is-visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      var el = en.target;
+      el.classList.add('is-visible');
+      io.unobserve(el);
+      // Bersihkan setelah animasi selesai supaya efek hover kartu tetap jalan
+      setTimeout(function () { el.classList.remove('reveal', 'is-visible'); el.style.removeProperty('--d'); }, 1200);
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+
+// ---------- Ikon myXL berputar mengikuti guliran + bar daftar di HP ----------
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var section = document.querySelector('[data-orbit-section]');
+  var orbit = section && section.querySelector('.orbit');
+  var bar = document.querySelector('.sticky-cta');
+  var footer = document.querySelector('.site-footer');
+  var ticking = false;
+
+  function update() {
+    ticking = false;
+    var vh = window.innerHeight;
+    if (orbit && !reduce) {
+      var r = section.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < vh) {
+        // 0 saat bagian baru masuk layar, 1 saat sudah lewat
+        var progress = (vh - r.top) / (vh + r.height);
+        orbit.style.setProperty('--rot', (progress * 200 - 60).toFixed(2) + 'deg');
+      }
+    }
+    if (bar) {
+      var nearFooter = footer && footer.getBoundingClientRect().top < vh;
+      var show = window.scrollY > 500 && !nearFooter;
+      bar.classList.toggle('show', show);
+      bar.setAttribute('aria-hidden', show ? 'false' : 'true');
+      var link = bar.querySelector('a');
+      if (link) link.tabIndex = show ? 0 : -1;
+      document.body.classList.toggle('cta-on', show);
+    }
+  }
+  function onScroll() {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();

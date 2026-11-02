@@ -36,6 +36,12 @@
   <span class="wa-float-label">Chat Sales</span>
 </a>
 
+<div class="sticky-cta" aria-hidden="true">
+  <span class="sticky-icon"><?= icon('hourglass', 26) ?></span>
+  <strong>Sekarang Waktunya Dapat Lebih</strong>
+  <a class="btn btn-wa" href="<?= e(wa_link('Halo, saya mau daftar internet ' . config('site_name') . '. Boleh dibantu?')) ?>" target="_blank" rel="noopener" data-track="wa" tabindex="-1">Daftar Sebelum Terlambat!</a>
+</div>
+
 <script src="<?= e(asset('assets/js/main.js')) ?>" defer></script>
 </body>
 </html>
