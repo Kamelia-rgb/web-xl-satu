@@ -22,3 +22,6 @@ WHERE NOT EXISTS (SELECT 1 FROM paket WHERE nama = 'XL Satu Spark' AND kecepatan
 --    Catatan: web juga menambahkan kolom ini otomatis saat dibuka.
 ALTER TABLE paket ADD COLUMN IF NOT EXISTS jenis VARCHAR(20) NOT NULL DEFAULT 'Fiber' AFTER id;
 UPDATE paket SET jenis = 'FWA' WHERE nama LIKE 'FWA%';
+
+-- 5. Hapus promo "Diskon Bulan Pertama"
+DELETE FROM promo WHERE judul = 'Diskon Bulan Pertama';

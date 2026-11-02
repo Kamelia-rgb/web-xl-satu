@@ -77,8 +77,8 @@ p { margin: 0 0 1em; }
 }
 .header-inner { display: flex; align-items: center; justify-content: space-between; min-height: 66px; gap: 16px; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary); font-weight: 800; font-size: 1.25rem; }
-.brand-mark { color: var(--primary); display: flex; }
-.brand-text { letter-spacing: .02em; }
+.brand-logo { display: block; height: 36px; width: auto; }
+.footer-brand img { height: 40px; width: auto; }
 
 .nav-toggle { display: none; background: none; border: 0; padding: 10px; cursor: pointer; }
 .nav-toggle .bar { display: block; width: 24px; height: 2.5px; background: var(--text); margin: 5px 0; border-radius: 2px; transition: .2s; }

@@ -1,7 +1,8 @@
 body.admin { background: var(--bg-soft); }
 .admin-header { background: var(--primary-dark); color: #fff; position: sticky; top: 0; z-index: 20; }
 .admin-header-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; min-height: 60px; padding-top: 8px; padding-bottom: 8px; }
-.admin-header .brand { color: #fff; font-size: 1.1rem; }
+.admin-header .brand { color: #fff; font-size: 1.1rem; display: flex; align-items: center; }
+.admin-header .brand-logo { height: 30px; }
 .admin-tag { font-size: .7rem; background: var(--accent); color: #1a1a1a; padding: 2px 8px; border-radius: 999px; margin-left: 6px; vertical-align: middle; }
 .admin-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
 .admin-nav a, .link-btn { color: rgba(255,255,255,.85); text-decoration: none; padding: 6px 10px; border-radius: 8px; font-weight: 600; font-size: .92rem; }

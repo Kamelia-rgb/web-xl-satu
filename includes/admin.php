@@ -19,7 +19,7 @@ function admin_header(string $title, string $active = ''): void
 <?php if (is_admin()): ?>
 <header class="admin-header">
   <div class="container admin-header-inner">
-    <a class="brand" href="<?= e(url('admin/')) ?>"><?= e(config('site_name')) ?> <span class="admin-tag">Admin</span></a>
+    <a class="brand" href="<?= e(url('admin/')) ?>"><img class="brand-logo" src="<?= e(asset('assets/img/logo-xl-satu-putih.png')) ?>" alt="<?= e(config('site_name')) ?>" width="102" height="30"> <span class="admin-tag">Admin</span></a>
     <nav class="admin-nav">
       <?php foreach ($menu as $file => $label): ?>
         <a href="<?= e(url('admin/' . $file)) ?>"<?= $active === $file ? ' aria-current="page"' : '' ?>><?= e($label) ?></a>

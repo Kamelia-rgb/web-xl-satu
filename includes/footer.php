@@ -3,7 +3,7 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div>
-      <p class="footer-brand"><?= e(config('site_name')) ?></p>
+      <p class="footer-brand"><img src="<?= e(asset('assets/img/logo-xl-satu-putih.png')) ?>" alt="<?= e(config('site_name')) ?>" width="136" height="40" loading="lazy"></p>
       <p><?= e(config('tagline')) ?>. Layanan pemasangan untuk area <?= e(config('area_layanan')) ?>.</p>
     </div>
     <div>

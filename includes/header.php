@@ -88,10 +88,7 @@ fbq('track', 'PageView');
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="<?= e(url()) ?>" aria-label="<?= e($siteName) ?> – Beranda">
-      <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 32 32" width="32" height="32"><rect width="32" height="32" rx="9" fill="currentColor"/><path d="M8 13.5a11 11 0 0 1 16 0M11 17a6.5 6.5 0 0 1 10 0" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="16" cy="21.5" r="2.2" fill="#fff"/></svg>
-      </span>
-      <span class="brand-text"><?= e($siteName) ?></span>
+      <img class="brand-logo" src="<?= e(asset('assets/img/logo-xl-satu.png')) ?>" alt="<?= e($siteName) ?>" width="123" height="36">
     </a>
 
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-utama">

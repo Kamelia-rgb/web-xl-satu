@@ -200,7 +200,15 @@ function get_promo(bool $onlyActive = true): array
         $sql .= ' WHERE aktif = 1 AND (berlaku_sampai IS NULL OR berlaku_sampai >= ' . db()->quote(date('Y-m-d')) . ')';
     }
     $sql .= ' ORDER BY urutan ASC, id DESC';
-    return db()->query($sql)->fetchAll();
+    $rows = db()->query($sql)->fetchAll();
+    // Abaikan gambar yang filenya sudah tidak ada, supaya tidak tampil gambar rusak.
+    foreach ($rows as &$row) {
+        if (!empty($row['gambar']) && !preg_match('#^https?://#', $row['gambar']) && !is_file(__DIR__ . '/../' . $row['gambar'])) {
+            $row['gambar'] = null;
+        }
+    }
+    unset($row);
+    return $rows;
 }
 
 /** Benefit disimpan satu per baris. */

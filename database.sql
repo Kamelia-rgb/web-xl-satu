@@ -85,5 +85,4 @@ INSERT INTO paket (jenis, kategori, nama, kecepatan, harga, harga_coret, periode
 -- ---------- Contoh promo ----------
 INSERT INTO promo (judul, deskripsi, gambar, berlaku_sampai, tampil_banner, aktif, urutan) VALUES
 ('Gratis Biaya Pemasangan', 'Daftar bulan ini dan nikmati pemasangan tanpa biaya. Teknisi datang ke rumah setelah survei lokasi.', 'assets/img/promo/promo-1.svg', NULL, 1, 1, 1),
-('Diskon Bulan Pertama', 'Potongan harga untuk tagihan bulan pertama khusus pelanggan baru. Syarat & ketentuan berlaku.', 'assets/img/promo/promo-2.svg', NULL, 1, 1, 2),
-('Bonus Kuota untuk HP', 'Setiap paket internet rumah dapat bonus kuota XL di HP untuk seluruh anggota keluarga.', 'assets/img/promo/promo-3.svg', NULL, 1, 1, 3);
+('Bonus Kuota untuk HP', 'Setiap paket internet rumah dapat bonus kuota XL di HP untuk seluruh anggota keluarga.', 'assets/img/promo/promo-3.svg', NULL, 1, 1, 2);
