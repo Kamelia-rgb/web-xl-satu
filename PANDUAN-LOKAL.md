@@ -187,7 +187,7 @@ Contoh yang sering diubah:
 | Masalah | Penyebab & solusi |
 |---|---|
 | **Apache tidak mau Start** (port 80 dipakai) | Biasanya bentrok dengan Skype, IIS, atau VMware. Tutup program tersebut. Atau di XAMPP klik **Config → httpd.conf**, ganti `Listen 80` jadi `Listen 8080`, lalu buka web di `http://localhost:8080/web-xl-satu` dan ubah `base_url` di `config.php` menjadi `http://localhost:8080/web-xl-satu`. |
-| **MySQL tidak mau Start** (port 3306 dipakai) | Ada MySQL lain yang sedang jalan. Matikan lewat *Services* Windows (cari "MySQL", klik Stop), lalu Start lagi di XAMPP. |
+| **MySQL tidak mau Start** / **"MySQL shutdown unexpectedly"** | Lihat bagian **Memperbaiki "MySQL shutdown unexpectedly"** di bawah. |
 | Tulisan **"File config.php belum ada"** | Langkah 6 belum dilakukan, atau nama filenya salah (misalnya `config.php.txt`). |
 | **"Access denied for user"** | `db_user`/`db_pass` di `config.php` salah. Di XAMPP: `root` dan password kosong. |
 | **"Unknown database 'xlsatu_web'"** | Database belum dibuat (Langkah 5a), atau nama di `config.php` berbeda. |
@@ -196,6 +196,29 @@ Contoh yang sering diubah:
 | Web tampil **berantakan tanpa warna**, atau link menu **Not Found** | `base_url` di `config.php` tidak sama dengan nama folder. Folder `htdocs\web-xl-satu` berarti `base_url` harus `http://localhost/web-xl-satu`. |
 | **"could not find driver"** | Ekstensi MySQL PHP mati. Di XAMPP klik **Config → PHP (php.ini)**, cari `;extension=pdo_mysql`, hapus tanda `;` di depannya, simpan, lalu Stop dan Start Apache. |
 | **Gagal upload banner** | File harus JPG/PNG/WEBP dan maksimal 3 MB. |
+
+### Memperbaiki "MySQL shutdown unexpectedly"
+
+Coba urut dari atas; berhenti begitu MySQL sudah hijau.
+
+**1. Cek apakah port 3306 dipakai program lain**
+- Di XAMPP Control Panel klik tombol **Netstat** (kanan atas) dan cari angka **3306**. Kalau ada program lain selain `mysqld.exe` dari XAMPP, berarti bentrok.
+- Biasanya penyebabnya MySQL lain yang terpasang (misalnya dari MySQL Installer atau Laragon). Tekan **Windows + R**, ketik `services.msc`, Enter. Cari **MySQL** / **MySQL80**, klik kanan **Stop**, lalu klik kanan **Properties → Startup type: Manual**.
+- Start lagi MySQL di XAMPP.
+
+**2. Perbaiki data MySQL yang rusak** (penyebab paling sering, misalnya setelah komputer mati mendadak)
+1. Klik **Stop** MySQL di XAMPP (kalau masih ada), lalu tutup XAMPP.
+2. Buka folder `C:\xampp\mysql\`
+3. Ganti nama folder **`data`** menjadi **`data_old`**.
+4. **Copy** folder **`backup`** lalu **Paste** di tempat yang sama, dan ganti nama hasil copy-nya menjadi **`data`**.
+5. Kalau sebelumnya sudah sempat membuat database (misalnya `xlsatu_web`): copy folder **`xlsatu_web`** dan file **`ibdata1`** dari `data_old` ke `data` (pilih *Replace*). Kalau belum pernah membuat database, lewati langkah ini.
+6. Buka XAMPP lagi, lalu **Start** MySQL.
+7. Kalau database `xlsatu_web` belum ada di phpMyAdmin, ulangi **Langkah 5** (buat database dan import).
+
+**3. Jalankan XAMPP sebagai Administrator**
+Klik kanan **XAMPP Control Panel**, lalu pilih **Run as administrator**. Pastikan juga XAMPP terpasang di `C:\xampp`, bukan di `C:\Program Files`.
+
+**Masih gagal?** Klik tombol **Logs** di baris MySQL, pilih **mysql_error.log**, lalu salin 20 baris terakhir. Dari situ penyebab pastinya bisa terlihat.
 
 ---
 
