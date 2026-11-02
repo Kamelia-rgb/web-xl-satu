@@ -60,11 +60,14 @@ require __DIR__ . '/includes/header.php';
       <h2>Paket FWA</h2>
       <p>Tanpa tarik kabel, cukup pakai modem. Untuk alamat yang belum tercover jaringan kabel.</p>
     </div>
+    <?php render_fwa_keunggulan(); ?>
     <?php render_package_list($perJenis['FWA']); ?>
     <p class="note text-center mt-2">Keterangan PPN tercantum di tiap paket. Harga dan benefit dapat berubah sewaktu-waktu sesuai ketentuan.</p>
   </div>
 </section>
 <?php endif; ?>
+
+<?php render_addon_kuota(); ?>
 
 <section class="section section-soft">
   <div class="container">

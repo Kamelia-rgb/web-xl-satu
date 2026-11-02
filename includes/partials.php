@@ -205,6 +205,9 @@ function icon(string $name, int $size = 26): string
         'cable'   => '<path d="M4 20c4 0 4-6 8-6s4 6 8 6"/><path d="M8 4v4M16 4v4"/><rect x="6" y="8" width="12" height="6" rx="2"/>',
         'modem'   => '<rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 16.5h.01M11 16.5h.01"/><path d="M8.5 9.5a5 5 0 0 1 7 0M6 7a8.5 8.5 0 0 1 12 0"/>',
         'phone-call' => '<path d="M5 4h3.5l1.8 4.4-2.3 1.4a11 11 0 0 0 6.2 6.2l1.4-2.3L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4Z"/><path d="M14.5 3.5a6 6 0 0 1 6 6M14.5 7a2.5 2.5 0 0 1 2.5 2.5"/>',
+        'laptop'  => '<rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/>',
+        'plug'    => '<path d="M9 3v5M15 3v5"/><path d="M6 8h12v3a6 6 0 0 1-12 0Z"/><path d="M12 17v4"/>',
+        'share'   => '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>',
         'hourglass' => '<path d="M6 3h12M6 21h12"/><path d="M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/>',
         'headset' => '<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="2.5" y="14" width="4" height="6" rx="1.5"/><rect x="17.5" y="14" width="4" height="6" rx="1.5"/>',
     ];
@@ -391,5 +394,91 @@ function render_bantuan(): void
         <a class="help-btn help-nonxl" href="<?= e(tel_link($nonXl)) ?>"><?= icon('phone-call', 30) ?><span><small>Pengguna Non-XL</small><b><?= e($nonXl) ?></b></span></a>
       </div>
     </div>
+    <?php
+}
+
+/** Keunggulan FWA: modem di tengah, 3 keunggulan kiri + 3 kanan. */
+function render_fwa_keunggulan(): void
+{
+    $kiri = [
+        ['wifi', 'Tanpa Kabel', 'Tidak perlu tarik kabel ke rumah, cukup pakai modem.'],
+        ['bolt', 'Aktivasi Cepat', 'Modem datang, colok, langsung bisa online.'],
+        ['plug', 'Cukup Colok Listrik', 'Pemasangan simpel, tanpa bongkar dinding.'],
+    ];
+    $kanan = [
+        ['tv', 'Streaming HD', 'Nonton film dan video favorit dengan lancar.'],
+        ['game', 'Gaming', 'Main game online bareng teman tanpa ribet.'],
+        ['laptop', 'WFH Online', 'Kerja dan sekolah online dari rumah.'],
+    ];
+    $item = function (array $it): void {
+        [$ic, $t, $d] = $it; ?>
+        <div class="fk-item reveal">
+          <span class="fk-icon"><?= icon($ic, 26) ?></span>
+          <div><h3><?= e($t) ?></h3><p><?= e($d) ?></p></div>
+        </div>
+    <?php };
+    ?>
+    <div class="fk">
+      <div class="section-head">
+        <span class="jenis-badge jenis-badge-fwa">Keunggulan FWA</span>
+        <h3 class="fk-title">Internet Praktis Tanpa Instalasi Kabel</h3>
+        <p>Aktivasi cepat, fleksibel digunakan, dan siap mendukung aktivitas digital keluarga.</p>
+      </div>
+      <div class="fk-grid">
+        <div class="fk-col"><?php foreach ($kiri as $it) { $item($it); } ?></div>
+        <div class="fk-modem" aria-hidden="true">
+          <div class="fk-rings"><span></span><span></span><span></span></div>
+          <svg class="fk-device" viewBox="0 0 160 190">
+            <defs>
+              <linearGradient id="mdm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e3ebf5"/></linearGradient>
+            </defs>
+            <rect x="52" y="6" width="8" height="46" rx="4" fill="#cfd9e6"/>
+            <rect x="100" y="6" width="8" height="46" rx="4" fill="#cfd9e6"/>
+            <rect x="22" y="44" width="116" height="136" rx="24" fill="url(#mdm)" stroke="#d3deec" stroke-width="2"/>
+            <rect x="40" y="66" width="80" height="10" rx="5" fill="#e8f0fa"/>
+            <circle cx="56" cy="104" r="5" fill="#10a37f"/><circle cx="74" cy="104" r="5" fill="#10a37f"/><circle cx="92" cy="104" r="5" fill="#1554c0"/><circle cx="110" cy="104" r="5" fill="#ffb703"/>
+            <path d="M58 140a30 30 0 0 1 44 0M66 150a18 18 0 0 1 28 0" fill="none" stroke="#1554c0" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="80" cy="160" r="4.5" fill="#1554c0"/>
+          </svg>
+        </div>
+        <div class="fk-col"><?php foreach ($kanan as $it) { $item($it); } ?></div>
+      </div>
+    </div>
+    <?php
+}
+
+/** Add-on Kuota HP Sekeluarga (banner + keunggulan). */
+function render_addon_kuota(): void
+{
+    $items = [
+        ['coin', 'Lebih Hemat', 'Kuota dibagi bersama, pengeluaran keluarga lebih hemat.'],
+        ['users', 'Kuota Sekeluarga', 'Satu paket kuota untuk HP seluruh anggota keluarga.'],
+        ['share', 'Lebih Praktis', 'Tidak perlu beli kuota satu per satu.'],
+        ['gift', 'Bonus Kuota', 'Dapat tambahan kuota untuk HP keluarga.'],
+        ['list', 'Atur Dengan Mudah', 'Bagi dan pantau kuota lewat aplikasi myXL.'],
+        ['support', 'Support Keluarga', 'Dibantu sales dan Customer Service 24 jam.'],
+    ];
+    ?>
+    <section class="section addon-section" id="kuota-sekeluarga">
+      <div class="container addon-grid">
+        <div class="addon-banner">
+          <img src="<?= e(asset('assets/img/kuota-sekeluarga.jpg')) ?>" alt="Add-on Kuota HP Sekeluarga: bagi kuota, makin hemat, semua makin dekat" width="1051" height="971" loading="lazy">
+        </div>
+        <div class="addon-text">
+          <span class="eyebrow">⚡ Add-on</span>
+          <h2>Kuota HP Sekeluarga</h2>
+          <p class="addon-lead">Bagi kuota, makin hemat, semua makin dekat. Tambahkan ke paket internet rumah kamu.</p>
+          <div class="addon-items">
+            <?php foreach ($items as [$ic, $t, $d]): ?>
+              <div class="addon-item reveal">
+                <span class="addon-icon"><?= icon($ic, 24) ?></span>
+                <div><h3><?= e($t) ?></h3><p><?= e($d) ?></p></div>
+              </div>
+            <?php endforeach; ?>
+          </div>
+          <a class="btn btn-wa btn-lg" href="<?= e(wa_link('Halo, saya mau tanya add-on Kuota HP Sekeluarga untuk internet ' . config('site_name') . '.')) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="Add-on Kuota HP Sekeluarga"><?= icon('chat', 20) ?> Tanya Add-on via WhatsApp</a>
+        </div>
+      </div>
+    </section>
     <?php
 }

@@ -115,11 +115,14 @@ require __DIR__ . '/includes/header.php';
       <h2>Belum Tercover Kabel? Pakai FWA</h2>
       <p>Internet rumah tanpa tarik kabel, cukup pakai modem. Pilihan untuk alamat yang belum terjangkau jaringan kabel.</p>
     </div>
+    <?php render_fwa_keunggulan(); ?>
     <?php render_package_list($fwa, false); ?>
     <p class="note text-center mt-2">Harga dapat berubah sewaktu-waktu. Hubungi sales untuk info harga &amp; promo terbaru di area kamu.</p>
   </div>
 </section>
 <?php endif; ?>
+
+<?php render_addon_kuota(); ?>
 
 <?php render_keunggulan(); ?>
 
