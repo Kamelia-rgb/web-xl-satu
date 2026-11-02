@@ -4,8 +4,9 @@ DirectoryIndex index.php
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Paksa HTTPS (tidak berlaku di komputer sendiri / localhost)
-  RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:\d+)?$ [NC]
+  # Paksa HTTPS (tidak berlaku di komputer sendiri: localhost atau alamat IP
+  # jaringan rumah seperti 192.168.x.x, supaya bisa dicoba dari HP)
+  RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|10\.\d+\.\d+\.\d+|172\.(1[6-9]|2\d|3[01])\.\d+\.\d+)(:\d+)?$ [NC]
   RewriteCond %{HTTPS} !=on
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

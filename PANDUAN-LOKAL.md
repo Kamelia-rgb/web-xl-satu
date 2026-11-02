@@ -145,6 +145,18 @@ Saat pertama kali membuka halaman admin, kamu akan diminta **membuat akun admin*
 
 ---
 
+## Melihat tampilan HP
+
+**Cara 1: di laptop.** Buka web di Google Chrome, tekan **F12**, lalu **Ctrl + Shift + M**. Pilih model HP di bagian atas (misalnya iPhone 12 Pro), lalu tekan **F5**.
+
+**Cara 2: di HP sungguhan** (HP dan laptop harus tersambung ke **WiFi yang sama**):
+1. Di laptop, buka **Command Prompt** dan ketik `ipconfig`, lalu Enter.
+2. Cari baris **IPv4 Address**, misalnya `192.168.1.7`.
+3. Di HP, buka browser dan ketik `http://192.168.1.7/web-xl-satu` (ganti dengan angka IP laptopmu).
+4. Kalau tidak bisa terbuka: izinkan Apache di **Windows Firewall**. Buka *Windows Defender Firewall → Allow an app through firewall*, cari **Apache HTTP Server**, lalu centang **Private**.
+
+---
+
 ## Langkah 8: Mengedit kode
 
 1. Ubah file di VS Code, lalu simpan (**Ctrl + S**).
