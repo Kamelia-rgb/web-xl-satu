@@ -75,7 +75,7 @@ p { margin: 0 0 1em; }
   background: rgba(255,255,255,.96); backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--border);
 }
-.header-inner { display: flex; align-items: center; justify-content: space-between; min-height: 66px; gap: 16px; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; min-height: 74px; gap: 16px; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary); font-weight: 800; font-size: 1.25rem; }
 .brand-logo { display: block; height: 36px; width: auto; }
 .footer-brand img { height: 40px; width: auto; }
@@ -86,14 +86,15 @@ p { margin: 0 0 1em; }
 .main-nav { display: flex; align-items: center; gap: 20px; }
 .main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 2px; }
 .main-nav a {
-  position: relative; display: block; overflow: hidden; padding: 10px 14px; border-radius: 10px;
-  color: #2b3348; text-decoration: none; font-weight: 600; font-size: .98rem; letter-spacing: .005em;
+  position: relative; display: block; overflow: hidden; padding: 10px 16px; border-radius: 10px;
+  color: #141a2b; text-decoration: none; font-family: "Poppins", "Plus Jakarta Sans", system-ui, sans-serif;
+  font-weight: 600; font-size: 1.12rem; letter-spacing: 0;
   transition: color .2s ease, transform .12s ease;
   -webkit-tap-highlight-color: transparent;
 }
 /* garis bawah yang meluncur */
 .main-nav a::after {
-  content: ""; position: absolute; left: 14px; right: 14px; bottom: 5px; height: 3px; border-radius: 3px;
+  content: ""; position: absolute; left: 16px; right: 16px; bottom: 5px; height: 3px; border-radius: 3px;
   background: linear-gradient(90deg, #1554c0, #10a37f);
   transform: scaleX(0); transform-origin: center; transition: transform .3s cubic-bezier(.2,.8,.2,1);
 }
@@ -110,7 +111,9 @@ p { margin: 0 0 1em; }
 }
 @keyframes nav-ripple { to { transform: scale(1); opacity: 0; } }
 
-@media (max-width: 920px) {
+@media (max-width: 1120px) and (min-width: 1041px) { .main-nav a { padding: 10px 12px; font-size: 1.05rem; } }
+
+@media (max-width: 1040px) {
   .nav-toggle { display: block; }
   .main-nav {
     position: absolute; left: 0; right: 0; top: 100%;
