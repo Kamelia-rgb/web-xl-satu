@@ -1,0 +1,4 @@
+config.php
+uploads/promo/*
+!uploads/promo/.gitkeep
+.DS_Store

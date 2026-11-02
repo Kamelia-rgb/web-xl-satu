@@ -1,0 +1,84 @@
+(function () {
+  'use strict';
+
+  // ---------- Menu HP ----------
+  var toggle = document.querySelector('.nav-toggle');
+  var nav = document.getElementById('menu-utama');
+  if (toggle && nav) {
+    toggle.addEventListener('click', function () {
+      var open = nav.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+
+  // ---------- Slider banner promo ----------
+  document.querySelectorAll('[data-slider]').forEach(function (slider) {
+    var track = slider.querySelector('.slider-track');
+    var slides = track ? track.children : [];
+    var dotsWrap = slider.querySelector('.slider-dots');
+    if (!track || slides.length < 2) return;
+
+    var index = 0;
+    var dots = [];
+    for (var i = 0; i < slides.length; i++) {
+      (function (n) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Banner ' + (n + 1));
+        b.addEventListener('click', function () { go(n); restart(); });
+        dotsWrap.appendChild(b);
+        dots.push(b);
+      })(i);
+    }
+
+    function mark(n) {
+      index = n;
+      dots.forEach(function (d, k) { d.setAttribute('aria-current', k === n ? 'true' : 'false'); });
+    }
+    function go(n) {
+      n = (n + slides.length) % slides.length;
+      track.scrollTo({ left: slides[n].offsetLeft - track.offsetLeft, behavior: 'smooth' });
+      mark(n);
+    }
+
+    var prev = slider.querySelector('.slider-nav.prev');
+    var next = slider.querySelector('.slider-nav.next');
+    if (prev) prev.addEventListener('click', function () { go(index - 1); restart(); });
+    if (next) next.addEventListener('click', function () { go(index + 1); restart(); });
+
+    var scrollTimer;
+    track.addEventListener('scroll', function () {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(function () {
+        mark(Math.round(track.scrollLeft / track.clientWidth));
+      }, 80);
+    });
+
+    var timer;
+    function restart() {
+      clearInterval(timer);
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      timer = setInterval(function () { go(index + 1); }, 5000);
+    }
+    slider.addEventListener('mouseenter', function () { clearInterval(timer); });
+    slider.addEventListener('mouseleave', restart);
+    mark(0);
+    restart();
+  });
+
+  // ---------- Pelacakan klik WhatsApp (Google Ads / Meta Pixel) ----------
+  document.addEventListener('click', function (ev) {
+    var link = ev.target.closest('[data-track="wa"]');
+    if (!link) return;
+    var label = link.getAttribute('data-paket') || '';
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'klik_whatsapp', { paket: label });
+      if (window.SITE && window.SITE.adsConversion) {
+        window.gtag('event', 'conversion', { send_to: window.SITE.adsConversion });
+      }
+    }
+    if (typeof window.fbq === 'function') {
+      window.fbq('track', 'Contact', { content_name: label });
+    }
+  });
+})();
