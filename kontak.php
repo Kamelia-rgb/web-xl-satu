@@ -109,6 +109,8 @@ $cls = function (string $f) use ($errors): string {
       </ul>
       <a class="btn btn-wa btn-block" href="<?= e(wa_link('Halo, saya mau cek apakah alamat saya bisa dipasang internet ' . config('site_name') . '.')) ?>" target="_blank" rel="noopener" data-track="wa">Chat WhatsApp Sekarang</a>
 
+      <div class="mt-3"><?php render_bantuan(); ?></div>
+
       <h3 class="mt-3">Syarat pendaftaran</h3>
       <ul class="checklist">
         <li>Foto KTP pemohon</li>

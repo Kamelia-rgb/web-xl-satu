@@ -93,6 +93,12 @@ function format_phone(string $phone): string
     return trim(implode(' ', [substr($local, 0, 4), substr($local, 4, 4), substr($local, 8)]));
 }
 
+/** Link telepon: '0817 0123 442' -> 'tel:08170123442' */
+function tel_link(string $number): string
+{
+    return 'tel:' . preg_replace('/[^\d+]/', '', $number);
+}
+
 function redirect(string $path): void
 {
     header('Location: ' . (preg_match('#^https?://#', $path) ? $path : url($path)));

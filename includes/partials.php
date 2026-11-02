@@ -204,6 +204,7 @@ function icon(string $name, int $size = 26): string
         'coin'    => '<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10.5h18"/><circle cx="15.5" cy="15" r="1.6"/>',
         'cable'   => '<path d="M4 20c4 0 4-6 8-6s4 6 8 6"/><path d="M8 4v4M16 4v4"/><rect x="6" y="8" width="12" height="6" rx="2"/>',
         'modem'   => '<rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 16.5h.01M11 16.5h.01"/><path d="M8.5 9.5a5 5 0 0 1 7 0M6 7a8.5 8.5 0 0 1 12 0"/>',
+        'phone-call' => '<path d="M5 4h3.5l1.8 4.4-2.3 1.4a11 11 0 0 0 6.2 6.2l1.4-2.3L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4Z"/><path d="M14.5 3.5a6 6 0 0 1 6 6M14.5 7a2.5 2.5 0 0 1 2.5 2.5"/>',
         'hourglass' => '<path d="M6 3h12M6 21h12"/><path d="M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/>',
         'headset' => '<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="2.5" y="14" width="4" height="6" rx="1.5"/><rect x="17.5" y="14" width="4" height="6" rx="1.5"/>',
     ];
@@ -218,6 +219,7 @@ function render_faq(): void
         ['Apa saja syarat pendaftarannya?', 'Cukup foto KTP, nomor HP/WhatsApp aktif, alamat lengkap pemasangan, dan email. Semua bisa dikirim lewat WhatsApp.'],
         ['Apakah ada biaya pemasangan?', 'Ikuti promo yang sedang berlaku di halaman Promo. Sales akan menjelaskan rincian biaya dengan jelas sebelum pemasangan.'],
         ['Apakah internetnya unlimited?', 'Ya, paket internet rumah tidak dibatasi kuota. Detail kebijakan pemakaian akan dijelaskan saat pendaftaran.'],
+        ['Kalau ada kendala atau gangguan setelah terpasang?', 'Hubungi Customer Service XL 24 jam: ' . config('cs_xl', '820') . ' (dari nomor XL) atau ' . config('cs_non_xl', '0817 0123 442') . ' (dari nomor non-XL). Kamu juga bisa chat sales kami via WhatsApp, kami bantu teruskan.'],
         ['Bagaimana cara pembayaran tagihan bulanan?', 'Tagihan bisa dibayar melalui aplikasi, transfer bank, minimarket, atau dompet digital sesuai pilihan yang tersedia.'],
     ];
     ?>
@@ -375,5 +377,22 @@ function render_jenis_info(bool $withLinks = true): void
       </div>
     </div>
     <p class="note text-center mt-2">Belum tahu alamatmu tercover kabel atau tidak? <a href="<?= e(wa_link('Halo, saya mau cek alamat saya tercover jaringan kabel (Fiber) atau pakai FWA.')) ?>" target="_blank" rel="noopener" data-track="wa">Cek gratis via WhatsApp</a>.</p>
+    <?php
+}
+
+/** Kotak "Butuh Bantuan?" dengan nomor Customer Service XL. */
+function render_bantuan(): void
+{
+    $xl = (string) config('cs_xl', '820');
+    $nonXl = (string) config('cs_non_xl', '0817 0123 442');
+    ?>
+    <div class="help-card">
+      <h3>Butuh Bantuan?</h3>
+      <p>Ada kendala atau gangguan setelah terpasang? Hubungi <strong>Customer Service XL</strong>, siap membantu setiap hari 24 jam.</p>
+      <div class="help-btns">
+        <a class="help-btn help-xl" href="<?= e(tel_link($xl)) ?>"><?= icon('phone-call', 30) ?><span><small>Pengguna XL</small><b><?= e($xl) ?></b></span></a>
+        <a class="help-btn help-nonxl" href="<?= e(tel_link($nonXl)) ?>"><?= icon('phone-call', 30) ?><span><small>Pengguna Non-XL</small><b><?= e($nonXl) ?></b></span></a>
+      </div>
+    </div>
     <?php
 }

@@ -22,6 +22,7 @@
         <li>WhatsApp: <a href="<?= e(wa_link()) ?>" target="_blank" rel="noopener" data-track="wa"><?= e(config('wa_display')) ?></a></li>
         <?php if (config('email')): ?><li>Email: <a href="mailto:<?= e(config('email')) ?>"><?= e(config('email')) ?></a></li><?php endif; ?>
         <li><?= e(config('jam_layanan')) ?></li>
+        <li>Ada kendala? CS XL: <a href="<?= e(tel_link((string) config('cs_xl', '820'))) ?>"><?= e(config('cs_xl', '820')) ?></a> (XL) · <a href="<?= e(tel_link((string) config('cs_non_xl', '0817 0123 442'))) ?>"><?= e(config('cs_non_xl', '0817 0123 442')) ?></a> (non-XL)</li>
       </ul>
     </div>
   </div>

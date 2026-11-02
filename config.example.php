@@ -17,7 +17,10 @@ return [
     'wa_display'   => '0813 4060 7328',
     'email'        => '',
     'area_layanan' => 'Kota kamu dan sekitarnya',
-    'jam_layanan'  => 'Senin – Minggu, 08.00 – 21.00',
+    'jam_layanan'  => 'Setiap hari, 24 jam',
+    // Customer Service XL untuk kendala/gangguan (tampil di halaman Kontak, FAQ & footer)
+    'cs_xl'        => '820',            // untuk pengguna XL
+    'cs_non_xl'    => '0817 0123 442',  // untuk pengguna non-XL
     // Teks pemberitahuan di bagian bawah web (penting untuk kebijakan iklan)
     'disclaimer'   => 'Website ini dikelola oleh mitra penjualan layanan XL Satu dan bukan situs resmi XL. Harga dan promo dapat berubah sewaktu-waktu sesuai ketentuan yang berlaku.',
 

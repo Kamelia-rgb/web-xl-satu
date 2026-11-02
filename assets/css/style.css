@@ -560,3 +560,17 @@ textarea { min-height: 100px; resize: vertical; }
 .jenis-badge-fiber { background: #dff6f9; color: #0d7f8f; }
 .jenis-badge-fwa { background: #fff1dd; color: #a35800; }
 @media (max-width: 760px) { .jenis-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Butuh bantuan (Customer Service) ---------- */
+.help-card { border-radius: var(--radius); padding: 22px; background: linear-gradient(160deg, #e3f1fb 0%, #f4f9fd 100%); border: 1px solid #cfe3f3; }
+.help-card h3 { color: #1b3a8a; font-size: 1.5rem; margin-bottom: 6px; }
+.help-card p { color: #2f3a52; margin-bottom: 14px; }
+.help-btns { display: grid; gap: 10px; }
+.help-btn { display: flex; align-items: center; gap: 14px; padding: 10px 18px; border-radius: 16px; color: #fff; text-decoration: none; transition: transform .15s, filter .15s; }
+.help-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+.help-btn:active { transform: scale(.97); }
+.help-btn span { display: flex; flex-direction: column; line-height: 1.15; }
+.help-btn small { font-weight: 600; font-size: .85rem; }
+.help-btn b { font-size: 1.45rem; font-weight: 800; letter-spacing: .01em; }
+.help-xl { background: #0fa57f; }
+.help-nonxl { background: #1e8ed0; }
