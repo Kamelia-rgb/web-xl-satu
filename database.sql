@@ -83,6 +83,14 @@ INSERT INTO paket (jenis, kategori, nama, kecepatan, harga, harga_coret, periode
 ('FWA', 'Internet + Bonus', 'FWA 3 Bulanan', 100, 650000, 942000, 3, 0, 0, 'Bulan ke-4 dst Rp219.000/bulan', 'Bonus nonton 3 bulan: Vidio Lite & Catchplay+', 'Hemat', 0, 1, 14),
 ('FWA', 'Internet + Bonus', 'FWA 4 Bulanan', 50, 650000, 1085000, 4, 0, 0, 'Bulan ke-5 dst Rp200.000/bulan', 'Bonus nonton 3 bulan: Vidio Lite & Catchplay+', 'Hemat', 0, 1, 15);
 
+-- ---------- Detail paket Internet + TV (channel, bonus kuota, pemasangan) ----------
+UPDATE paket SET harga = 388500, ideal_untuk = 'Cocok untuk WFH dan Online Shop, Video Conference 4K, Game Online HD, Streaming 4K, Multi Device, TV Kabel',
+  benefit = '98 Channel TV\nBonus Kuota XL 25 GB\nGratis Biaya Pemasangan + Alat + Kabel 40 Meter' WHERE nama = 'Joy Value' AND kecepatan = 100;
+UPDATE paket SET harga = 471750, ideal_untuk = 'Cocok untuk WFH dan Online Shop, Video Conference 4K, Game Online HD, Streaming 4K, Multi Device, TV Kabel',
+  benefit = '98 Channel TV\nBonus Kuota XL 50 GB\nGratis Biaya Pemasangan + Alat + Kabel 40 Meter' WHERE nama = 'Joy Pro' AND kecepatan = 150;
+UPDATE paket SET harga = 749250, ideal_untuk = 'Cocok untuk WFH dan Online Shop, Video Conference 4K, Game Online HD, Streaming 4K, Multi Device, TV Kabel',
+  benefit = '160 Channel TV\nBonus Kuota XL 50 GB\nGratis Biaya Pemasangan + Alat + Kabel 40 Meter' WHERE nama = 'Joy Premium' AND kecepatan = 200;
+
 -- ---------- Contoh promo ----------
 INSERT INTO promo (judul, deskripsi, gambar, berlaku_sampai, tampil_banner, aktif, urutan) VALUES
 ('Gratis Biaya Pemasangan', 'Daftar bulan ini dan nikmati pemasangan tanpa biaya. Teknisi datang ke rumah setelah survei lokasi.', 'assets/img/promo/promo-1.svg', NULL, 1, 1, 1),

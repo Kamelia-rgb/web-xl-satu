@@ -32,3 +32,11 @@ ALTER TABLE leads ADD COLUMN IF NOT EXISTS lokasi VARCHAR(255) NULL AFTER kota;
 
 -- 7. Kategori Internet + TV menjadi Internet + TV + Kuota Keluarga
 UPDATE paket SET kategori = 'Internet + TV + Kuota Keluarga' WHERE kategori = 'Internet + TV';
+
+-- 8. Detail paket Joy: harga, channel TV, bonus kuota XL, pemasangan
+UPDATE paket SET harga = 388500, ideal_untuk = 'Cocok untuk WFH dan Online Shop, Video Conference 4K, Game Online HD, Streaming 4K, Multi Device, TV Kabel',
+  benefit = '98 Channel TV\nBonus Kuota XL 25 GB\nGratis Biaya Pemasangan + Alat + Kabel 40 Meter' WHERE nama = 'Joy Value' AND kecepatan = 100;
+UPDATE paket SET harga = 471750, ideal_untuk = 'Cocok untuk WFH dan Online Shop, Video Conference 4K, Game Online HD, Streaming 4K, Multi Device, TV Kabel',
+  benefit = '98 Channel TV\nBonus Kuota XL 50 GB\nGratis Biaya Pemasangan + Alat + Kabel 40 Meter' WHERE nama = 'Joy Pro' AND kecepatan = 150;
+UPDATE paket SET harga = 749250, ideal_untuk = 'Cocok untuk WFH dan Online Shop, Video Conference 4K, Game Online HD, Streaming 4K, Multi Device, TV Kabel',
+  benefit = '160 Channel TV\nBonus Kuota XL 50 GB\nGratis Biaya Pemasangan + Alat + Kabel 40 Meter' WHERE nama = 'Joy Premium' AND kecepatan = 200;

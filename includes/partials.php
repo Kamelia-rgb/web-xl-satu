@@ -3,21 +3,28 @@
 
 const PAKET_KATEGORI = ['Internet Only', 'Internet + TV + Kuota Keluarga', 'Internet + Bonus'];
 
-/** Benefit kuota keluarga yang tampil di kartu paket Internet + TV. Ubah teksnya di sini. */
-const KUOTA_KELUARGA_BENEFIT = [
-    ['coin', 'Lebih Hemat'],
-    ['users', 'Kuota Sekeluarga'],
-    ['share', 'Lebih Praktis'],
-    ['gift', 'Bonus Kuota'],
-    ['list', 'Atur Dengan Mudah'],
-    ['support', 'Support Keluarga'],
-];
 
-/** Paket Internet + TV sudah termasuk kuota HP sekeluarga. */
-function paket_ada_kuota_keluarga(array $p): bool
+/** Pilih ikon benefit dari isi teksnya. */
+function benefit_icon(string $text): string
 {
-    $k = strtolower((string) ($p['kategori'] ?? ''));
-    return strpos($k, 'tv') !== false || strpos($k, 'kuota keluarga') !== false;
+    $t = strtolower($text);
+    if (strpos($t, 'channel') !== false || strpos($t, 'tv') !== false) return 'tv';
+    if (strpos($t, 'kuota') !== false || strpos($t, 'gb') !== false) return 'gift';
+    if (strpos($t, 'pemasangan') !== false || strpos($t, 'instalasi') !== false || strpos($t, 'kabel') !== false || strpos($t, 'alat') !== false) return 'tool';
+    if (strpos($t, 'bulan ke') !== false) return 'gauge';
+    return 'gauge';
+}
+
+/** True bila daftar benefit sudah menyebut pemasangan/instalasi (baris default disembunyikan). */
+function benefit_sebut_pemasangan(array $benefits): bool
+{
+    foreach ($benefits as $b) {
+        $t = strtolower($b);
+        if (strpos($t, 'pemasangan') !== false || strpos($t, 'instalasi') !== false) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function slugify(string $text): string
@@ -123,23 +130,15 @@ function render_package_card(array $p): void
 
         <ul class="pkg-feats">
           <li><?= icon('devices') ?><span>Hingga <?= paket_perangkat($p) ?> Perangkat</span></li>
-          <li><?= icon('router') ?><span><?= (int) $p['biaya_instalasi'] > 0 ? 'Biaya Instalasi ' . e(rupiah($p['biaya_instalasi'])) : 'Gratis Biaya Instalasi' ?></span></li>
-          <li><?= icon('receipt') ?><span><?= !empty($p['ppn_termasuk']) ? 'Termasuk PPN 11%' : 'Belum Termasuk PPN 11%' ?></span></li>
-          <?php foreach (lines((string) $p['benefit']) as $b): ?>
-            <li><?= icon('gauge') ?><span><?= e($b) ?></span></li>
+          <?php $benefits = lines((string) $p['benefit']); ?>
+          <?php foreach ($benefits as $b): ?>
+            <li class="feat-<?= e(benefit_icon($b)) ?>"><?= icon(benefit_icon($b)) ?><span><?= e($b) ?></span></li>
           <?php endforeach; ?>
+          <?php if (!benefit_sebut_pemasangan($benefits)): ?>
+            <li><?= icon('router') ?><span><?= (int) $p['biaya_instalasi'] > 0 ? 'Biaya Instalasi ' . e(rupiah($p['biaya_instalasi'])) : 'Gratis Biaya Instalasi' ?></span></li>
+          <?php endif; ?>
+          <li><?= icon('receipt') ?><span><?= !empty($p['ppn_termasuk']) ? 'Termasuk PPN 11%' : 'Belum Termasuk PPN 11%' ?></span></li>
         </ul>
-
-        <?php if (paket_ada_kuota_keluarga($p)): ?>
-          <div class="pkg-kuota">
-            <p class="pkg-kuota-title"><?= icon('users', 18) ?> Benefit Kuota HP Sekeluarga</p>
-            <ul>
-              <?php foreach (KUOTA_KELUARGA_BENEFIT as [$ic, $txt]): ?>
-                <li><?= icon($ic, 16) ?><?= e($txt) ?></li>
-              <?php endforeach; ?>
-            </ul>
-          </div>
-        <?php endif; ?>
 
         <?php if (!empty($p['bonus'])): ?>
           <div class="pkg-bonus"><?= icon('gift') ?><span><?= e($p['bonus']) ?></span></div>

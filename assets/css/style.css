@@ -692,9 +692,6 @@ textarea { min-height: 100px; resize: vertical; }
   .fk-item { padding: 14px; }
 }
 
-/* ---------- Benefit kuota keluarga di kartu Internet + TV ---------- */
-.pkg-kuota { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: linear-gradient(135deg, #e6f0ff, #f1f7ff); border: 1px solid #cfe0ff; }
-.pkg-kuota-title { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font-weight: 800; font-size: .9rem; color: #1554c0; }
-.pkg-kuota ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
-.pkg-kuota li { display: flex; align-items: center; gap: 6px; font-size: .84rem; font-weight: 600; color: #233150; }
-.pkg-kuota li svg { flex: 0 0 auto; color: #1554c0; }
+/* ---------- Benefit per paket (channel TV, bonus kuota, pemasangan) ---------- */
+.pkg-feats li.feat-tv svg, .pkg-feats li.feat-gift svg { color: #1554c0; }
+.pkg-feats li.feat-gift span { font-weight: 800; color: #1554c0; }
