@@ -11,6 +11,7 @@ unset($_SESSION['lead_done']);
 $message = "Halo, saya baru saja mengisi formulir pendaftaran di website.\n"
     . 'Nama: ' . $lead['nama'] . "\n"
     . 'Alamat: ' . $lead['alamat'] . "\n"
+    . (!empty($lead['lokasi']) ? 'Lokasi: ' . $lead['lokasi'] . "\n" : '')
     . ($lead['paket'] ? 'Paket: ' . $lead['paket'] . "\n" : '')
     . 'Mohon dibantu cek area dan proses pemasangannya. Terima kasih.';
 
@@ -29,8 +30,12 @@ require __DIR__ . '/includes/header.php';
     </div>
     <h1 style="font-size:2rem">Terima kasih, <?= e($lead['nama']) ?>!</h1>
     <p>Data pendaftaran kamu sudah kami terima. Sales kami akan segera menghubungi lewat WhatsApp untuk cek area dan jadwal pemasangan.</p>
-    <p><strong>Ingin lebih cepat?</strong> Kirim data kamu langsung ke WhatsApp sales sekarang.</p>
-    <a class="btn btn-wa" href="<?= e(wa_link($message)) ?>" target="_blank" rel="noopener" data-track="wa">Kirim ke WhatsApp Sales</a>
+    <div class="wa-auto" data-wa-auto="<?= e(wa_link($message)) ?>">
+      <p><strong>Membuka WhatsApp…</strong> Tinggal tekan <b>Kirim</b> supaya data kamu langsung sampai ke sales.</p>
+      <div class="wa-auto-bar"><span></span></div>
+    </div>
+    <p class="note">Kalau WhatsApp tidak terbuka otomatis, tekan tombol ini:</p>
+    <a class="btn btn-wa" href="<?= e(wa_link($message)) ?>" data-track="wa">Kirim ke WhatsApp Sales</a>
     <p class="mt-2"><a href="<?= e(url()) ?>">Kembali ke beranda</a></p>
   </div>
 </section>
@@ -44,6 +49,9 @@ require __DIR__ . '/includes/header.php';
     }
   }
   if (typeof window.fbq === 'function') { window.fbq('track', 'Lead'); }
+  // Buka WhatsApp otomatis setelah sebentar (memberi waktu pelacakan iklan terkirim)
+  var box = document.querySelector('[data-wa-auto]');
+  if (box) { setTimeout(function () { window.location.href = box.getAttribute('data-wa-auto'); }, 1800); }
 })();
 </script>
 

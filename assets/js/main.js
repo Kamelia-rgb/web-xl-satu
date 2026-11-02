@@ -204,3 +204,29 @@ document.querySelectorAll('[data-pkg-filter]').forEach(function (wrap) {
     });
   }
 })();
+
+// ---------- Formulir: ambil lokasi otomatis (GPS) ----------
+(function () {
+  var btn = document.querySelector('[data-geo]');
+  var input = document.getElementById('lokasi');
+  var status = document.querySelector('[data-geo-status]');
+  if (!btn || !input) return;
+  function say(text, cls) { if (status) { status.textContent = text; status.className = 'hint' + (cls ? ' ' + cls : ''); } }
+  btn.addEventListener('click', function () {
+    if (!('geolocation' in navigator) || !window.isSecureContext) {
+      say('Browser ini tidak bisa mengambil lokasi otomatis. Tempel link Google Maps secara manual ya.', 'err');
+      return;
+    }
+    btn.disabled = true;
+    say('Mengambil lokasi… izinkan akses lokasi bila diminta.');
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var lat = pos.coords.latitude.toFixed(6), lng = pos.coords.longitude.toFixed(6);
+      input.value = 'https://maps.google.com/?q=' + lat + ',' + lng;
+      say('✓ Lokasi berhasil diambil. Pastikan kamu sedang berada di rumah yang mau dipasang.', 'ok');
+      btn.disabled = false;
+    }, function () {
+      say('Lokasi tidak bisa diambil (akses ditolak / GPS mati). Boleh dikosongkan atau tempel link Google Maps.', 'err');
+      btn.disabled = false;
+    }, { enableHighAccuracy: true, timeout: 15000 });
+  });
+})();

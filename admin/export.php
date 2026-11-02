@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/../includes/bootstrap.php';
 require_admin();
+ensure_leads_lokasi();
 
 $status = (string) ($_GET['status'] ?? '');
 $q = trim((string) ($_GET['q'] ?? ''));
@@ -22,7 +23,7 @@ header('Content-Disposition: attachment; filename="calon-pelanggan-' . date('Y-m
 
 $out = fopen('php://output', 'w');
 fwrite($out, "\xEF\xBB\xBF"); // BOM supaya Excel membaca huruf dengan benar
-fputcsv($out, ['Tanggal', 'Nama', 'WhatsApp', 'Alamat', 'Kota', 'Paket', 'Catatan', 'Sumber', 'Status', 'Catatan Sales'], ';');
+fputcsv($out, ['Tanggal', 'Nama', 'WhatsApp', 'Alamat', 'Kota', 'Lokasi', 'Paket', 'Catatan', 'Sumber', 'Status', 'Catatan Sales'], ';');
 
 /** Cegah rumus Excel berbahaya dari isian formulir (CSV injection). */
 $safe = function ($v): string {
@@ -36,6 +37,7 @@ while ($l = $stmt->fetch()) {
         format_phone($l['no_wa']),
         $l['alamat'],
         $l['kota'],
+        $l['lokasi'] ?? '',
         $l['paket_nama'],
         $l['catatan'],
         $l['sumber'],

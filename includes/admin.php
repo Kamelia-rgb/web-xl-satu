@@ -11,7 +11,8 @@ function admin_header(string $title, string $active = ''): void
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title><?= e($title) ?> – Admin <?= e(config('site_name')) ?></title>
-<link rel="icon" href="<?= e(url('assets/img/favicon.svg')) ?>" type="image/svg+xml">
+<link rel="icon" href="<?= e(url('assets/img/favicon.png')) ?>" type="image/png">
+<link rel="apple-touch-icon" href="<?= e(url('assets/img/apple-touch-icon.png')) ?>">
 <link rel="stylesheet" href="<?= e(asset('assets/css/style.css')) ?>">
 <link rel="stylesheet" href="<?= e(asset('assets/css/admin.css')) ?>">
 </head>

@@ -41,7 +41,8 @@ $pixel = (string) config('meta_pixel_id');
 <meta property="og:image" content="<?= e($ogImage) ?>">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="<?= e(url('assets/img/favicon.svg')) ?>" type="image/svg+xml">
+<link rel="icon" href="<?= e(url('assets/img/favicon.png')) ?>" type="image/png">
+<link rel="apple-touch-icon" href="<?= e(url('assets/img/apple-touch-icon.png')) ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">

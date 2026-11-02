@@ -52,6 +52,7 @@ CREATE TABLE IF NOT EXISTS leads (
   no_wa VARCHAR(20) NOT NULL,
   alamat TEXT NOT NULL,
   kota VARCHAR(100) NULL,
+  lokasi VARCHAR(255) NULL COMMENT 'Link Google Maps titik rumah',
   paket_id INT UNSIGNED NULL,
   paket_nama VARCHAR(100) NULL,
   catatan TEXT NULL,

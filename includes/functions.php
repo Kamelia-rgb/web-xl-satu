@@ -192,6 +192,52 @@ function ensure_paket_jenis(): void
     }
 }
 
+/** Tambah kolom leads.lokasi otomatis untuk database lama. */
+function ensure_leads_lokasi(): void
+{
+    static $done = false;
+    if ($done) {
+        return;
+    }
+    $done = true;
+    try {
+        if (!db()->query("SHOW COLUMNS FROM leads LIKE 'lokasi'")->fetch()) {
+            db()->exec("ALTER TABLE leads ADD COLUMN lokasi VARCHAR(255) NULL AFTER kota");
+        }
+    } catch (PDOException $ex) {
+        // Diabaikan: formulir tetap jalan tanpa kolom lokasi.
+    }
+}
+
+/**
+ * Rapikan isian lokasi: koordinat "-6.39, 106.82" jadi link Google Maps,
+ * link http(s) dibiarkan, selain itu dianggap tidak valid.
+ * Mengembalikan '' bila kosong, null bila tidak valid.
+ */
+function normalize_lokasi(string $text): ?string
+{
+    $text = trim($text);
+    if ($text === '') {
+        return '';
+    }
+    if (preg_match('/^(-?\d{1,2}\.\d+)\s*,\s*(-?\d{1,3}\.\d+)$/', $text, $m)) {
+        return 'https://maps.google.com/?q=' . $m[1] . ',' . $m[2];
+    }
+    if (preg_match('#^https?://\S+$#i', $text) && strlen($text) <= 255) {
+        return $text;
+    }
+    return null;
+}
+
+/** Ambil koordinat dari link lokasi (untuk peta kecil di admin). */
+function lokasi_koordinat(?string $url): ?string
+{
+    if ($url && preg_match('/(-?\d{1,2}\.\d{3,})\s*,\s*(-?\d{1,3}\.\d{3,})/', $url, $m)) {
+        return $m[1] . ',' . $m[2];
+    }
+    return null;
+}
+
 function get_paket(bool $onlyActive = true): array
 {
     ensure_paket_jenis();

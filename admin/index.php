@@ -2,6 +2,7 @@
 require __DIR__ . '/../includes/bootstrap.php';
 require __DIR__ . '/../includes/admin.php';
 require_admin();
+ensure_leads_lokasi();
 
 // ---------- Simpan perubahan status / catatan sales ----------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -95,9 +96,15 @@ admin_header('Calon Pelanggan', 'index.php');
       <dl>
         <dt>WhatsApp</dt><dd><a href="<?= e('https://wa.me/' . $l['no_wa'] . '?text=' . rawurlencode($waMsg)) ?>" target="_blank" rel="noopener">+<?= e($l['no_wa']) ?></a></dd>
         <dt>Alamat</dt><dd><?= nl2br(e($l['alamat'])) ?><?= $l['kota'] ? ', ' . e($l['kota']) : '' ?></dd>
+        <?php $lok = $l['lokasi'] ?? ''; if ($lok && preg_match('#^https?://#i', $lok)): ?>
+          <dt>Lokasi</dt><dd><a class="map-link" href="<?= e($lok) ?>" target="_blank" rel="noopener">🗺️ Buka di Google Maps</a></dd>
+        <?php endif; ?>
         <dt>Paket</dt><dd><?= e($l['paket_nama'] ?: 'Belum memilih') ?></dd>
         <?php if ($l['catatan']): ?><dt>Catatan</dt><dd><?= nl2br(e($l['catatan'])) ?></dd><?php endif; ?>
       </dl>
+      <?php if ($koor = lokasi_koordinat($l['lokasi'] ?? null)): ?>
+        <iframe class="lead-map" src="https://maps.google.com/maps?q=<?= e($koor) ?>&amp;z=16&amp;output=embed" loading="lazy" title="Peta lokasi <?= e($l['nama']) ?>"></iframe>
+      <?php endif; ?>
     </div>
     <form class="lead-form" method="post">
       <?= csrf_field() ?>

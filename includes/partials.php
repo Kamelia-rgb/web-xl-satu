@@ -335,9 +335,6 @@ function render_myxl(?array $p): void
             <?php if ($appstore !== ''): ?><a class="store-btn" href="<?= e($appstore) ?>" target="_blank" rel="noopener"><small>Download di</small>App Store</a><?php endif; ?>
             <a class="store-btn" href="<?= e($play) ?>" target="_blank" rel="noopener"><small>Tersedia di</small>Google Play</a>
           </div>
-          <a class="wa-bubble" href="<?= e(wa_link('Halo, saya mau daftar internet ' . config('site_name') . ' lewat WhatsApp.')) ?>" target="_blank" rel="noopener" data-track="wa">
-            <span>Yuk daftar lebih cepat dengan WhatsApp!</span><?= icon('chat', 30) ?>
-          </a>
         </div>
       </div>
     </section>

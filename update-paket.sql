@@ -25,3 +25,7 @@ UPDATE paket SET jenis = 'FWA' WHERE nama LIKE 'FWA%';
 
 -- 5. Hapus promo "Diskon Bulan Pertama"
 DELETE FROM promo WHERE judul = 'Diskon Bulan Pertama';
+
+-- 6. Kolom lokasi (link Google Maps) di data calon pelanggan
+--    Catatan: web juga menambahkan kolom ini otomatis saat dibuka.
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS lokasi VARCHAR(255) NULL AFTER kota;
