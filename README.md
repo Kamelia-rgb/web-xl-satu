@@ -27,6 +27,10 @@ Website promosi internet rumah XL Satu untuk sales. Dibuat dengan **PHP + MySQL*
 
 ---
 
+## Coba di komputer sendiri dulu
+
+Lihat **[PANDUAN-LOKAL.md](PANDUAN-LOKAL.md)**: cara membuka kode di VS Code, menjalankan web dengan XAMPP, dan import database lewat phpMyAdmin.
+
 ## Cara upload ke hosting (cPanel)
 
 ### 1. Beli hosting + domain

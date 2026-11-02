@@ -4,7 +4,8 @@ DirectoryIndex index.php
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Paksa HTTPS (aktifkan setelah SSL di hosting sudah aktif)
+  # Paksa HTTPS (tidak berlaku di komputer sendiri / localhost)
+  RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:\d+)?$ [NC]
   RewriteCond %{HTTPS} !=on
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
@@ -15,7 +16,7 @@ DirectoryIndex index.php
 
   # Blokir akses langsung ke file internal
   RewriteRule ^(includes|vendor)/ - [F,L]
-  RewriteRule ^(config\.php|config\.example\.php|database\.sql|README\.md)$ - [F,L]
+  RewriteRule ^(config\.php|config\.example\.php|database\.sql|.*\.md)$ - [F,L]
 
   # sitemap.xml
   RewriteRule ^sitemap\.xml$ sitemap.php [L]
@@ -26,9 +27,12 @@ DirectoryIndex index.php
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond %{REQUEST_FILENAME}.php -f
   RewriteRule ^([a-z0-9\-]+)/?$ $1.php [L]
-</IfModule>
 
-ErrorDocument 404 /404.php
+  # Halaman tidak ditemukan
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ 404.php [L]
+</IfModule>
 
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
