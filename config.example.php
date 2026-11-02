@@ -13,8 +13,8 @@ return [
 
     // ---- Kontak sales ----
     // Format internasional tanpa + dan tanpa spasi (0813... -> 62813...)
-    'wa_number'    => '6281340607328',
-    'wa_display'   => '0813 4060 7328',
+    'wa_number'    => '6281340607327',
+    'wa_display'   => '0813 4060 7327',
     'email'        => '',
     'area_layanan' => 'Kota kamu dan sekitarnya',
     'jam_layanan'  => 'Setiap hari, 24 jam',
