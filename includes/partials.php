@@ -1,7 +1,24 @@
 <?php
 /** Potongan tampilan yang dipakai di beberapa halaman. */
 
-const PAKET_KATEGORI = ['Internet Only', 'Internet + TV', 'Internet + Bonus'];
+const PAKET_KATEGORI = ['Internet Only', 'Internet + TV + Kuota Keluarga', 'Internet + Bonus'];
+
+/** Benefit kuota keluarga yang tampil di kartu paket Internet + TV. Ubah teksnya di sini. */
+const KUOTA_KELUARGA_BENEFIT = [
+    ['coin', 'Lebih Hemat'],
+    ['users', 'Kuota Sekeluarga'],
+    ['share', 'Lebih Praktis'],
+    ['gift', 'Bonus Kuota'],
+    ['list', 'Atur Dengan Mudah'],
+    ['support', 'Support Keluarga'],
+];
+
+/** Paket Internet + TV sudah termasuk kuota HP sekeluarga. */
+function paket_ada_kuota_keluarga(array $p): bool
+{
+    $k = strtolower((string) ($p['kategori'] ?? ''));
+    return strpos($k, 'tv') !== false || strpos($k, 'kuota keluarga') !== false;
+}
 
 function slugify(string $text): string
 {
@@ -112,6 +129,17 @@ function render_package_card(array $p): void
             <li><?= icon('gauge') ?><span><?= e($b) ?></span></li>
           <?php endforeach; ?>
         </ul>
+
+        <?php if (paket_ada_kuota_keluarga($p)): ?>
+          <div class="pkg-kuota">
+            <p class="pkg-kuota-title"><?= icon('users', 18) ?> Benefit Kuota HP Sekeluarga</p>
+            <ul>
+              <?php foreach (KUOTA_KELUARGA_BENEFIT as [$ic, $txt]): ?>
+                <li><?= icon($ic, 16) ?><?= e($txt) ?></li>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+        <?php endif; ?>
 
         <?php if (!empty($p['bonus'])): ?>
           <div class="pkg-bonus"><?= icon('gift') ?><span><?= e($p['bonus']) ?></span></div>
@@ -447,38 +475,3 @@ function render_fwa_keunggulan(): void
     <?php
 }
 
-/** Add-on Kuota HP Sekeluarga (banner + keunggulan). */
-function render_addon_kuota(): void
-{
-    $items = [
-        ['coin', 'Lebih Hemat', 'Kuota dibagi bersama, pengeluaran keluarga lebih hemat.'],
-        ['users', 'Kuota Sekeluarga', 'Satu paket kuota untuk HP seluruh anggota keluarga.'],
-        ['share', 'Lebih Praktis', 'Tidak perlu beli kuota satu per satu.'],
-        ['gift', 'Bonus Kuota', 'Dapat tambahan kuota untuk HP keluarga.'],
-        ['list', 'Atur Dengan Mudah', 'Bagi dan pantau kuota lewat aplikasi myXL.'],
-        ['support', 'Support Keluarga', 'Dibantu sales dan Customer Service 24 jam.'],
-    ];
-    ?>
-    <section class="section addon-section" id="kuota-sekeluarga">
-      <div class="container addon-grid">
-        <div class="addon-banner">
-          <img src="<?= e(asset('assets/img/kuota-sekeluarga.jpg')) ?>" alt="Add-on Kuota HP Sekeluarga: bagi kuota, makin hemat, semua makin dekat" width="1051" height="971" loading="lazy">
-        </div>
-        <div class="addon-text">
-          <span class="eyebrow">⚡ Add-on</span>
-          <h2>Kuota HP Sekeluarga</h2>
-          <p class="addon-lead">Bagi kuota, makin hemat, semua makin dekat. Tambahkan ke paket internet rumah kamu.</p>
-          <div class="addon-items">
-            <?php foreach ($items as [$ic, $t, $d]): ?>
-              <div class="addon-item reveal">
-                <span class="addon-icon"><?= icon($ic, 24) ?></span>
-                <div><h3><?= e($t) ?></h3><p><?= e($d) ?></p></div>
-              </div>
-            <?php endforeach; ?>
-          </div>
-          <a class="btn btn-wa btn-lg" href="<?= e(wa_link('Halo, saya mau tanya add-on Kuota HP Sekeluarga untuk internet ' . config('site_name') . '.')) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="Add-on Kuota HP Sekeluarga"><?= icon('chat', 20) ?> Tanya Add-on via WhatsApp</a>
-        </div>
-      </div>
-    </section>
-    <?php
-}

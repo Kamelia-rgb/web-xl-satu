@@ -122,8 +122,6 @@ require __DIR__ . '/includes/header.php';
 </section>
 <?php endif; ?>
 
-<?php render_addon_kuota(); ?>
-
 <?php render_keunggulan(); ?>
 
 <?php render_myxl($unggulan); ?>

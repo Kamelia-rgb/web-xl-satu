@@ -29,3 +29,6 @@ DELETE FROM promo WHERE judul = 'Diskon Bulan Pertama';
 -- 6. Kolom lokasi (link Google Maps) di data calon pelanggan
 --    Catatan: web juga menambahkan kolom ini otomatis saat dibuka.
 ALTER TABLE leads ADD COLUMN IF NOT EXISTS lokasi VARCHAR(255) NULL AFTER kota;
+
+-- 7. Kategori Internet + TV menjadi Internet + TV + Kuota Keluarga
+UPDATE paket SET kategori = 'Internet + TV + Kuota Keluarga' WHERE kategori = 'Internet + TV';

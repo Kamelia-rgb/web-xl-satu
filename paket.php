@@ -67,8 +67,6 @@ require __DIR__ . '/includes/header.php';
 </section>
 <?php endif; ?>
 
-<?php render_addon_kuota(); ?>
-
 <section class="section section-soft">
   <div class="container">
     <div class="section-head">
