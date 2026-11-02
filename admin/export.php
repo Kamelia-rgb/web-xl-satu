@@ -25,7 +25,9 @@ fwrite($out, "\xEF\xBB\xBF"); // BOM supaya Excel membaca huruf dengan benar
 fputcsv($out, ['Tanggal', 'Nama', 'WhatsApp', 'Alamat', 'Kota', 'Paket', 'Catatan', 'Sumber', 'Status', 'Catatan Sales'], ';');
 
 /** Cegah rumus Excel berbahaya dari isian formulir (CSV injection). */
-$safe = fn ($v) => preg_match('/^[=+\-@\t\r]/', (string) $v) ? "'" . $v : (string) $v;
+$safe = function ($v): string {
+    return preg_match('/^[=+\-@\t\r]/', (string) $v) ? "'" . $v : (string) $v;
+};
 
 while ($l = $stmt->fetch()) {
     fputcsv($out, array_map($safe, [

@@ -12,8 +12,12 @@ $empty = [
 $errors = [];
 $editing = null;
 
-$money = fn (string $key) => (int) preg_replace('/\D/', '', (string) ($_POST[$key] ?? ''));
-$text = fn (string $key) => trim((string) ($_POST[$key] ?? ''));
+$money = function (string $key): int {
+    return (int) preg_replace('/\D/', '', (string) ($_POST[$key] ?? ''));
+};
+$text = function (string $key): string {
+    return trim((string) ($_POST[$key] ?? ''));
+};
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
@@ -60,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $cols = array_keys($data);
         if ($id > 0) {
-            $sql = 'UPDATE paket SET ' . implode(', ', array_map(fn ($c) => "$c = ?", $cols)) . ' WHERE id = ?';
-            db()->prepare($sql)->execute([...array_values($data), $id]);
+            $sql = 'UPDATE paket SET ' . implode(', ', array_map(function ($c) { return "$c = ?"; }, $cols)) . ' WHERE id = ?';
+            db()->prepare($sql)->execute(array_merge(array_values($data), [$id]));
             flash('success', 'Paket diperbarui.');
         } else {
             $sql = 'INSERT INTO paket (' . implode(', ', $cols) . ') VALUES (' . implode(', ', array_fill(0, count($cols), '?')) . ')';

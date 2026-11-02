@@ -1,6 +1,14 @@
 <?php
 declare(strict_types=1);
 
+// Pengganti fungsi PHP 8 supaya web tetap jalan di PHP 7.3 (XAMPP versi lama).
+if (!function_exists('str_starts_with')) {
+    function str_starts_with(string $haystack, string $needle): bool
+    {
+        return $needle === '' || strpos($haystack, $needle) === 0;
+    }
+}
+
 function config(string $key, $default = null)
 {
     return $GLOBALS['config'][$key] ?? $default;

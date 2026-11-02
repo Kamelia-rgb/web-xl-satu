@@ -60,8 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$errors) {
         $cols = array_keys($data);
         if ($current) {
-            $sql = 'UPDATE promo SET ' . implode(', ', array_map(fn ($c) => "$c = ?", $cols)) . ' WHERE id = ?';
-            db()->prepare($sql)->execute([...array_values($data), $id]);
+            $sql = 'UPDATE promo SET ' . implode(', ', array_map(function ($c) { return "$c = ?"; }, $cols)) . ' WHERE id = ?';
+            db()->prepare($sql)->execute(array_merge(array_values($data), [$id]));
             flash('success', 'Promo diperbarui.');
         } else {
             $sql = 'INSERT INTO promo (' . implode(', ', $cols) . ') VALUES (' . implode(', ', array_fill(0, count($cols), '?')) . ')';

@@ -34,7 +34,7 @@ Lihat **[PANDUAN-LOKAL.md](PANDUAN-LOKAL.md)**: cara membuka kode di VS Code, me
 ## Cara upload ke hosting (cPanel)
 
 ### 1. Beli hosting + domain
-Pilih paket hosting yang sudah termasuk **domain .com gratis 1 tahun** dan **SSL gratis** (Hostinger, Niagahoster, Rumahweb, Domainesia, dll). Pastikan mendukung **PHP 8.1 atau lebih baru** dan **MySQL**.
+Pilih paket hosting yang sudah termasuk **domain .com gratis 1 tahun** dan **SSL gratis** (Hostinger, Niagahoster, Rumahweb, Domainesia, dll). Pastikan mendukung **PHP 7.3 atau lebih baru** (disarankan PHP 8.x) dan **MySQL**.
 
 ### 2. Buat database
 1. Masuk cPanel, lalu buka **MySQL Databases**

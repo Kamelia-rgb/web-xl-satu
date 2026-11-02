@@ -134,7 +134,7 @@ function render_package_card(array $p): void
 /** Tab filter kategori + daftar kartu paket. */
 function render_package_list(array $paket, bool $withTabs = true): void
 {
-    $cats = array_values(array_unique(array_map(fn ($p) => $p['kategori'] ?: 'Internet Only', $paket)));
+    $cats = array_values(array_unique(array_map(function ($p) { return $p['kategori'] ?: 'Internet Only'; }, $paket)));
     ?>
     <div class="pkg-wrap" data-pkg-filter>
       <?php if ($withTabs && count($cats) > 1): ?>
@@ -154,7 +154,7 @@ function render_package_list(array $paket, bool $withTabs = true): void
 
 function render_promo_slider(array $promos): void
 {
-    $promos = array_values(array_filter($promos, fn ($p) => !empty($p['gambar']) && !empty($p['tampil_banner'])));
+    $promos = array_values(array_filter($promos, function ($p) { return !empty($p['gambar']) && !empty($p['tampil_banner']); }));
     if (!$promos) {
         return;
     }

@@ -73,8 +73,12 @@ $page = [
 ];
 require __DIR__ . '/includes/header.php';
 
-$err = fn (string $f) => isset($errors[$f]) ? '<p class="field-error">' . e($errors[$f]) . '</p>' : '';
-$cls = fn (string $f) => isset($errors[$f]) ? ' has-error' : '';
+$err = function (string $f) use ($errors): string {
+    return isset($errors[$f]) ? '<p class="field-error">' . e($errors[$f]) . '</p>' : '';
+};
+$cls = function (string $f) use ($errors): string {
+    return isset($errors[$f]) ? ' has-error' : '';
+};
 ?>
 
 <section class="page-hero">

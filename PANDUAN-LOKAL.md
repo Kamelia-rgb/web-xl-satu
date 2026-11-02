@@ -15,7 +15,7 @@ Gambaran singkatnya:
 ## Langkah 1: Install program
 
 1. **VS Code**: download di https://code.visualstudio.com lalu install.
-2. **XAMPP**: download di https://www.apachefriends.org. Pilih versi **PHP 8.2 atau lebih baru**, lalu install di lokasi bawaan `C:\xampp`.
+2. **XAMPP**: download di https://www.apachefriends.org. Web ini jalan di **PHP 7.3 atau lebih baru**. Kalau XAMPP sudah terpasang (versi lama pun tidak apa-apa), tidak perlu install ulang. Kalau belum, install di lokasi bawaan `C:\xampp`.
 3. *(Opsional)* **Git**: download di https://git-scm.com. Hanya perlu kalau mau download kode lewat Git (Langkah 2, cara B).
 
 ---
