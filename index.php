@@ -23,40 +23,53 @@ require __DIR__ . '/includes/header.php';
 ?>
 
 <section class="hero">
+  <div class="hero-dots" aria-hidden="true"></div>
   <div class="container hero-inner">
-    <div>
-      <span class="hero-badge">🔥 Promo pelanggan baru bulan ini</span>
-      <h1>Internet Rumah <span class="hl"><?= e(config('site_name')) ?></span>, Cepat &amp; Unlimited</h1>
+    <div class="hero-text">
+      <span class="hero-badge"><span class="live-dot" aria-hidden="true"></span>Promo pelanggan baru bulan ini</span>
+      <h1>Internet Rumah <span class="hl">XL SATU<svg class="hl-swoosh" viewBox="0 0 220 18" preserveAspectRatio="none" aria-hidden="true"><path d="M3 13C50 4 120 2 217 9" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></span><br>Cepat &amp; Unlimited</h1>
       <p class="hero-lead">Streaming, kerja, sekolah online, dan main game tanpa putus. Pemasangan dibantu sales kami dari cek area sampai internet aktif.</p>
       <div class="hero-actions">
-        <a class="btn btn-wa" href="<?= e(wa_link('Halo, saya mau pasang internet ' . config('site_name') . '. Boleh info paket dan promonya?')) ?>" target="_blank" rel="noopener" data-track="wa">Daftar via WhatsApp</a>
-        <a class="btn btn-outline-light" href="<?= e(url('paket')) ?>">Lihat Paket</a>
+        <a class="btn btn-wa btn-lg" href="<?= e(wa_link('Halo, saya mau pasang internet ' . config('site_name') . '. Boleh info paket dan promonya?')) ?>" target="_blank" rel="noopener" data-track="wa"><?= icon('chat', 20) ?> Daftar via WhatsApp</a>
+        <a class="btn btn-glass btn-lg" href="<?= e(url('paket')) ?>">Lihat Paket <span aria-hidden="true">→</span></a>
       </div>
-      <ul class="hero-points">
-        <li>Tanpa batas kuota</li>
-        <li>Gratis cek area</li>
-        <li>Teknisi profesional</li>
+      <ul class="hero-stats">
+        <li><strong><?= count($paket) ?>+</strong><span>Pilihan paket</span></li>
+        <li><strong>24 Jam</strong><span>Layanan setiap hari</span></li>
+        <li><strong>Fiber &amp; FWA</strong><span>Kabel atau tanpa kabel</span></li>
       </ul>
     </div>
 
     <?php if ($unggulan): ?>
-    <div class="hero-card">
-      <p class="eyebrow"><?= e($unggulan['label'] ?: 'Paket Pilihan') ?></p>
-      <h2 style="font-size:1.35rem;margin:0"><?= e(paket_judul($unggulan)) ?></h2>
-      <p class="price-big"><?= e(rupiah($unggulan['harga'])) ?> <small><?= e(periode_label($unggulan)) ?></small></p>
-      <?php if (!empty($unggulan['harga_coret']) && $unggulan['harga_coret'] > $unggulan['harga']): ?>
-        <p class="price-from">Harga normal <s><?= e(rupiah($unggulan['harga_coret'])) ?></s></p>
-      <?php endif; ?>
-      <ul>
-        <li>Hingga <?= paket_perangkat($unggulan) ?> perangkat</li>
-        <li><?= (int) $unggulan['biaya_instalasi'] > 0 ? 'Biaya instalasi ' . e(rupiah($unggulan['biaya_instalasi'])) : 'Gratis biaya instalasi' ?></li>
-        <li><?= $unggulan['ppn_termasuk'] ? 'Sudah termasuk PPN 11%' : 'Belum termasuk PPN 11%' ?></li>
-        <li>Ideal untuk <?= e(implode(', ', array_slice(paket_ideal($unggulan), 2, 3))) ?></li>
-      </ul>
-      <a class="btn btn-primary btn-block" href="<?= e(wa_link(wa_message_paket($unggulan))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e(paket_judul($unggulan)) ?>">Ambil Paket Ini</a>
+    <div class="hero-visual">
+      <div class="hero-waves" aria-hidden="true"><span></span><span></span><span></span></div>
+      <span class="float-chip chip-1" aria-hidden="true"><?= icon('bolt', 18) ?> Hingga <?= max(array_column($paket, 'kecepatan')) ?> Mbps</span>
+      <span class="float-chip chip-2" aria-hidden="true"><?= icon('wifi', 18) ?> Fiber &amp; FWA</span>
+      <span class="float-chip chip-3" aria-hidden="true"><?= icon('tool', 18) ?> Gratis Instalasi</span>
+
+      <div class="hero-card">
+        <div class="hc-top">
+          <span class="hc-label"><?= e($unggulan['label'] ?: 'Paket Pilihan') ?></span>
+          <p class="hc-name"><?= e($unggulan['nama']) ?></p>
+          <p class="hc-speed"><strong><?= (int) $unggulan['kecepatan'] ?></strong> Mbps</p>
+        </div>
+        <div class="hc-body">
+          <?php if (!empty($unggulan['harga_coret']) && $unggulan['harga_coret'] > $unggulan['harga']): ?>
+            <p class="price-from">Harga normal <s><?= e(rupiah($unggulan['harga_coret'])) ?></s></p>
+          <?php endif; ?>
+          <p class="price-big"><?= e(rupiah($unggulan['harga'])) ?><small><?= e(periode_label($unggulan)) ?></small></p>
+          <ul>
+            <li><?= icon('devices', 18) ?>Hingga <?= paket_perangkat($unggulan) ?> perangkat</li>
+            <li><?= icon('router', 18) ?><?= (int) $unggulan['biaya_instalasi'] > 0 ? 'Biaya instalasi ' . e(rupiah($unggulan['biaya_instalasi'])) : 'Gratis biaya instalasi' ?></li>
+            <li><?= icon('receipt', 18) ?><?= $unggulan['ppn_termasuk'] ? 'Sudah termasuk PPN 11%' : 'Belum termasuk PPN 11%' ?></li>
+          </ul>
+          <a class="btn btn-primary btn-block" href="<?= e(wa_link(wa_message_paket($unggulan))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e(paket_judul($unggulan)) ?>">Ambil Paket Ini</a>
+        </div>
+      </div>
     </div>
     <?php endif; ?>
   </div>
+  <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50C240 90 480 10 720 30s480 50 720 10V80H0Z" fill="#fff"/></svg>
 </section>
 
 <?php if ($promo): ?>
