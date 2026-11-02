@@ -23,7 +23,7 @@ require __DIR__ . '/includes/header.php';
   <div class="container hero-inner">
     <div>
       <span class="hero-badge">🔥 Promo pelanggan baru bulan ini</span>
-      <h1>WiFi Rumah <span class="hl"><?= e(config('site_name')) ?></span> yang Andal untuk Seluruh Keluarga</h1>
+      <h1>Internet Rumah <span class="hl"><?= e(config('site_name')) ?></span>, Cepat &amp; Unlimited</h1>
       <p class="hero-lead">Streaming, kerja, sekolah online, dan main game tanpa putus. Pemasangan dibantu sales kami dari cek area sampai internet aktif.</p>
       <div class="hero-actions">
         <a class="btn btn-wa" href="<?= e(wa_link('Halo, saya mau pasang internet ' . config('site_name') . '. Boleh info paket dan promonya?')) ?>" target="_blank" rel="noopener" data-track="wa">Daftar via WhatsApp</a>
@@ -37,8 +37,20 @@ require __DIR__ . '/includes/header.php';
     </div>
 
     <?php if ($unggulan): ?>
-    <div class="hero-offer-wrap">
-      <?php render_hero_offer($unggulan); ?>
+    <div class="hero-card">
+      <p class="eyebrow"><?= e($unggulan['label'] ?: 'Paket Pilihan') ?></p>
+      <h2 style="font-size:1.35rem;margin:0"><?= e(paket_judul($unggulan)) ?></h2>
+      <p class="price-big"><?= e(rupiah($unggulan['harga'])) ?> <small><?= e(periode_label($unggulan)) ?></small></p>
+      <?php if (!empty($unggulan['harga_coret']) && $unggulan['harga_coret'] > $unggulan['harga']): ?>
+        <p class="price-from">Harga normal <s><?= e(rupiah($unggulan['harga_coret'])) ?></s></p>
+      <?php endif; ?>
+      <ul>
+        <li>Hingga <?= paket_perangkat($unggulan) ?> perangkat</li>
+        <li><?= (int) $unggulan['biaya_instalasi'] > 0 ? 'Biaya instalasi ' . e(rupiah($unggulan['biaya_instalasi'])) : 'Gratis biaya instalasi' ?></li>
+        <li><?= $unggulan['ppn_termasuk'] ? 'Sudah termasuk PPN 11%' : 'Belum termasuk PPN 11%' ?></li>
+        <li>Ideal untuk <?= e(implode(', ', array_slice(paket_ideal($unggulan), 2, 3))) ?></li>
+      </ul>
+      <a class="btn btn-primary btn-block" href="<?= e(wa_link(wa_message_paket($unggulan))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e(paket_judul($unggulan)) ?>">Ambil Paket Ini</a>
     </div>
     <?php endif; ?>
   </div>

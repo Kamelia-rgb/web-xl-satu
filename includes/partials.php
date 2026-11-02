@@ -266,35 +266,6 @@ function harga_pecah(int $harga): array
     return [number_format(intdiv($harga, 1000), 0, ',', '.'), '.' . str_pad((string) ($harga % 1000), 3, '0', STR_PAD_LEFT)];
 }
 
-/** Kotak kecepatan + harga di bagian atas beranda. */
-function render_hero_offer(array $p): void
-{
-    [$ribu, $sisa] = harga_pecah((int) $p['harga']);
-    $periode = (int) $p['periode_bulan'] > 1 ? '/' . (int) $p['periode_bulan'] . ' bln' : '/bln';
-    ?>
-    <div class="hero-offer reveal">
-      <div class="offer-speed">
-        <span>Kecepatan Hingga</span>
-        <strong><?= (int) $p['kecepatan'] ?></strong><em>Mbps</em>
-      </div>
-      <div class="offer-price">
-        <span class="offer-only">Hanya<br><small>Rp</small></span>
-        <strong><?= e($ribu) ?></strong>
-        <span class="offer-rest"><?= e($sisa) ?><br><small><?= e($periode) ?><?= $p['ppn_termasuk'] ? '' : '*' ?></small></span>
-      </div>
-    </div>
-    <div class="hero-offer-meta reveal">
-      <p><strong><?= e($p['nama']) ?></strong> · <?= e($p['kategori']) ?><?= $p['label'] ? ' · ' . e($p['label']) : '' ?></p>
-      <ul>
-        <li><?= (int) $p['biaya_instalasi'] > 0 ? 'Instalasi ' . e(rupiah($p['biaya_instalasi'])) : 'Gratis instalasi' ?></li>
-        <li>Hingga <?= paket_perangkat($p) ?> perangkat</li>
-        <li><?= $p['ppn_termasuk'] ? 'Termasuk PPN 11%' : '*Belum termasuk PPN' ?></li>
-      </ul>
-      <a class="btn btn-accent" href="<?= e(wa_link(wa_message_paket($p))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e(paket_judul($p)) ?>">Ambil Paket Ini</a>
-    </div>
-    <?php
-}
-
 /** Bagian "Paket Sekali Bayar, Lebih Untung" (paket dengan periode lebih dari 1 bulan). */
 function render_sekali_bayar(array $paket): void
 {
