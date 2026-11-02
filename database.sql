@@ -66,17 +66,18 @@ CREATE TABLE IF NOT EXISTS leads (
 INSERT INTO paket (kategori, nama, kecepatan, harga, harga_coret, periode_bulan, ppn_termasuk, biaya_instalasi, benefit, bonus, label, unggulan, aktif, urutan) VALUES
 ('Internet Only', 'XL Satu Starter', 20, 205000, NULL, 1, 1, 111000, NULL, NULL, NULL, 0, 1, 1),
 ('Internet Only', 'XL Satu Spark', 250, 254000, NULL, 1, 1, 0, NULL, NULL, 'Terlaris', 1, 1, 2),
+('Internet Only', 'XL Satu Spark', 300, 265290, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 2),
 ('Internet Only', 'XL Satu Spark', 350, 309000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 3),
 ('Internet Only', 'XL Satu Spark', 400, 333000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 4),
 ('Internet + TV', 'Joy Value', 100, 388000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 5),
 ('Internet + TV', 'Joy Pro', 150, 471000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 6),
 ('Internet Only', 'XL Satu Spark', 600, 555000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 7),
 ('Internet + TV', 'Joy Premium', 200, 749000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 8),
-('Internet + TV', 'XL Satu Spark', 1000, 999000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 9),
+('Internet Only', 'XL Satu Spark', 1000, 999000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 9),
 ('Internet + TV', 'Star Value', 300, 1093000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 10),
 ('Internet + TV', 'Star Pro', 500, 2053000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 11),
 ('Internet + TV', 'Star Premium', 1000, 4993000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 12),
-('Internet Only', 'FWA Bulanan', 100, 219000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 13),
+('Internet + Bonus', 'FWA Bulanan', 100, 219000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 13),
 ('Internet + Bonus', 'FWA 3 Bulanan', 100, 650000, 942000, 3, 0, 0, 'Bulan ke-4 dst Rp219.000/bulan', 'Bonus nonton 3 bulan: Vidio Lite & Catchplay+', 'Hemat', 0, 1, 14),
 ('Internet + Bonus', 'FWA 4 Bulanan', 50, 650000, 1085000, 4, 0, 0, 'Bulan ke-5 dst Rp200.000/bulan', 'Bonus nonton 3 bulan: Vidio Lite & Catchplay+', 'Hemat', 0, 1, 15);
 

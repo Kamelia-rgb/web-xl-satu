@@ -16,7 +16,7 @@ DirectoryIndex index.php
 
   # Blokir akses langsung ke file internal
   RewriteRule ^(includes|vendor)/ - [F,L]
-  RewriteRule ^(config\.php|config\.example\.php|database\.sql|.*\.md)$ - [F,L]
+  RewriteRule ^(config\.php|config\.example\.php|.*\.sql|.*\.md)$ - [F,L]
 
   # sitemap.xml
   RewriteRule ^sitemap\.xml$ sitemap.php [L]
