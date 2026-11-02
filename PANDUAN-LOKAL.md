@@ -211,9 +211,10 @@ Coba urut dari atas; berhenti begitu MySQL sudah hijau.
 2. Buka folder `C:\xampp\mysql\`
 3. Ganti nama folder **`data`** menjadi **`data_old`**.
 4. **Copy** folder **`backup`** lalu **Paste** di tempat yang sama, dan ganti nama hasil copy-nya menjadi **`data`**.
-5. Kalau sebelumnya sudah sempat membuat database (misalnya `xlsatu_web`): copy folder **`xlsatu_web`** dan file **`ibdata1`** dari `data_old` ke `data` (pilih *Replace*). Kalau belum pernah membuat database, lewati langkah ini.
-6. Buka XAMPP lagi, lalu **Start** MySQL.
-7. Kalau database `xlsatu_web` belum ada di phpMyAdmin, ulangi **Langkah 5** (buat database dan import).
+5. Buka folder `data` yang baru dan pastikan **ada folder `mysql` di dalamnya**. Kalau tidak ada, copy folder `mysql` dari `backup` ke `data`. Tanpa folder ini MySQL akan error *"Table 'mysql.servers' doesn't exist"*.
+6. Kalau ingin database lama kembali: dari `data_old`, copy **folder-folder database kamu** (semua folder **kecuali** `mysql`, `performance_schema`, `phpmyadmin`, `test`) **dan 3 file ini sekaligus**: `ibdata1`, `ib_logfile0`, `ib_logfile1`. Paste ke `data`, pilih *Replace*, lalu hapus file `ibtmp1` di `data` kalau ada. Ketiga file itu harus dicopy bersamaan; jangan hanya `ibdata1` saja.
+7. Buka XAMPP lagi, lalu **Start** MySQL.
+8. Kalau database `xlsatu_web` belum ada di phpMyAdmin, ulangi **Langkah 5** (buat database dan import).
 
 **3. Jalankan XAMPP sebagai Administrator**
 Klik kanan **XAMPP Control Panel**, lalu pilih **Run as administrator**. Pastikan juga XAMPP terpasang di `C:\xampp`, bukan di `C:\Program Files`.
