@@ -99,7 +99,7 @@ document.querySelectorAll('[data-pkg-filter]').forEach(function (wrap) {
 // ---------- Animasi: muncul saat digulir ----------
 (function () {
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var selectors = '.section-head, .feature, .pkg, .steps li, .faq details, .cta-band, .promo-card, .slider, .why-item, .perks, .sb-card, .myxl-text';
+  var selectors = '.section-head, .feature, .pkg, .steps li, .faq details, .cta-band, .promo-card, .slider, .why-item, .perks, .myxl-text, .jenis-card';
   var els = Array.prototype.slice.call(document.querySelectorAll(selectors));
   els.forEach(function (el) {
     el.classList.add('reveal');

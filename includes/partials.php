@@ -75,7 +75,7 @@ function render_package_card(array $p): void
     $hasOldSpeed = !empty($p['kecepatan_coret']) && $p['kecepatan_coret'] < $p['kecepatan'];
     $periode = periode_label($p);
     ?>
-    <article class="pkg pkg-<?= e(slugify($kategori)) ?><?= $p['unggulan'] ? ' is-featured' : '' ?>" data-kategori="<?= e(slugify($kategori)) ?>">
+    <article class="pkg pkg-<?= e(slugify($kategori)) ?> pkg-jenis-<?= e(strtolower(paket_jenis($p))) ?><?= $p['unggulan'] ? ' is-featured' : '' ?>" data-kategori="<?= e(slugify($kategori)) ?>">
       <div class="pkg-head">
         <div class="pkg-head-top">
           <span class="pkg-cat"><?= e($kategori) ?></span>
@@ -202,6 +202,8 @@ function icon(string $name, int $size = 26): string
         'percent' => '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 16l8-8"/><circle cx="8.5" cy="8.5" r="1.4"/><circle cx="15.5" cy="15.5" r="1.4"/>',
         'list'    => '<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8.5l1.2 1.2L11.5 7.5M13.5 9h3M8 14.5l1.2 1.2 2.3-2.2M13.5 15h3"/>',
         'coin'    => '<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10.5h18"/><circle cx="15.5" cy="15" r="1.6"/>',
+        'cable'   => '<path d="M4 20c4 0 4-6 8-6s4 6 8 6"/><path d="M8 4v4M16 4v4"/><rect x="6" y="8" width="12" height="6" rx="2"/>',
+        'modem'   => '<rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 16.5h.01M11 16.5h.01"/><path d="M8.5 9.5a5 5 0 0 1 7 0M6 7a8.5 8.5 0 0 1 12 0"/>',
         'hourglass' => '<path d="M6 3h12M6 21h12"/><path d="M7 3c0 5 5 6 5 9s-5 4-5 9M17 3c0 5-5 6-5 9s5 4 5 9"/>',
         'headset' => '<path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="2.5" y="14" width="4" height="6" rx="1.5"/><rect x="17.5" y="14" width="4" height="6" rx="1.5"/>',
     ];
@@ -257,79 +259,6 @@ function render_cta(): void
       </div>
       <a class="btn btn-accent" href="<?= e(wa_link('Halo, saya mau cek apakah alamat saya bisa dipasang internet ' . config('site_name') . '.')) ?>" target="_blank" rel="noopener" data-track="wa">Cek Area via WhatsApp</a>
     </div>
-    <?php
-}
-
-/** "Rp254" + ".000" untuk tampilan harga besar ala brosur. */
-function harga_pecah(int $harga): array
-{
-    return [number_format(intdiv($harga, 1000), 0, ',', '.'), '.' . str_pad((string) ($harga % 1000), 3, '0', STR_PAD_LEFT)];
-}
-
-/** Bagian "Paket Sekali Bayar, Lebih Untung" (paket dengan periode lebih dari 1 bulan). */
-function render_sekali_bayar(array $paket): void
-{
-    $list = array_values(array_filter($paket, function ($p) { return (int) $p['periode_bulan'] > 1; }));
-    if (!$list) {
-        return;
-    }
-    ?>
-    <section class="section sb-section" id="sekali-bayar">
-      <div class="container">
-        <div class="section-head sb-head">
-          <span class="eyebrow eyebrow-light">Paket Sekali Bayar</span>
-          <h2>Sekali Bayar, Lebih Untung!</h2>
-          <p>Bayar di muka untuk beberapa bulan sekaligus, lebih hemat dan dapat bonus nonton.</p>
-        </div>
-        <div class="sb-house">
-          <svg class="sb-roof" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M3 118 L175 8 L345 118 M300 89 L445 8 L597 118" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <?php foreach ($list as $i => $p):
-              $n = (int) $p['periode_bulan'];
-              $hemat = (!empty($p['harga_coret']) && $p['harga_coret'] > $p['harga']) ? (int) round(($p['harga_coret'] - $p['harga']) / $p['harga_coret'] * 100) : 0;
-              [$ribu, $sisa] = harga_pecah((int) $p['harga']);
-              $bonus = (string) $p['bonus'];
-              $bonusTitle = $bonus; $bonusDetail = '';
-              if (strpos($bonus, ':') !== false) {
-                  [$bonusTitle, $bonusDetail] = array_map('trim', explode(':', $bonus, 2));
-              }
-          ?>
-          <article class="sb-card reveal<?= $i === 0 ? ' is-best' : '' ?>">
-            <?php if ($i === 0): ?><span class="sb-best">Best Choice</span><?php endif; ?>
-            <div class="sb-speed">
-              <span>Kecepatan Hingga</span>
-              <strong><?= (int) $p['kecepatan'] ?></strong><em>Mbps</em>
-              <small><?= e($p['nama']) ?></small>
-            </div>
-            <div class="sb-main">
-              <p class="sb-deal">Sekali Bayar <b><?= $n ?></b> Bulan<?php if ($hemat): ?> Lebih Hemat <b><?= $hemat ?>%</b><?php endif; ?></p>
-              <div class="sb-row">
-                <div class="sb-price">
-                  <?php if ($hemat): ?><span class="sb-setara">Setara nilai <?= e(rupiah($p['harga_coret'])) ?></span><?php endif; ?>
-                  <p><sup>Rp</sup><strong><?= e($ribu) ?></strong><span><?= e($sisa) ?>*</span></p>
-                </div>
-                <?php if ($bonus !== ''): ?>
-                  <span class="sb-plus" aria-hidden="true">+</span>
-                  <div class="sb-bonus">
-                    <strong><?= e($bonusTitle) ?></strong>
-                    <?php if ($bonusDetail !== ''): ?><span><?= e($bonusDetail) ?></span><?php endif; ?>
-                  </div>
-                <?php endif; ?>
-              </div>
-              <?php foreach (lines((string) $p['benefit']) as $b): ?><p class="sb-note">*<?= e($b) ?></p><?php endforeach; ?>
-              <div class="sb-actions">
-                <a class="btn btn-wa btn-sm" href="<?= e(wa_link(wa_message_paket($p))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e(paket_judul($p)) ?>"><?= icon('chat', 16) ?> Chat WA</a>
-                <a class="btn btn-outline-light btn-sm" href="<?= e(url('kontak?paket=' . (int) $p['id'] . '#daftar')) ?>"><?= icon('edit', 16) ?> Isi Form</a>
-              </div>
-            </div>
-          </article>
-          <?php endforeach; ?>
-        </div>
-        <ul class="sb-terms">
-          <li>Pelanggan kembali dikenakan harga normal setelah masa paket/promo habis.</li>
-          <li><?= $list[0]['ppn_termasuk'] ? 'Harga sudah termasuk PPN 11%.' : 'Harga belum termasuk PPN 11%.' ?> Syarat &amp; ketentuan berlaku.</li>
-        </ul>
-      </div>
-    </section>
     <?php
 }
 
@@ -410,5 +339,41 @@ function render_myxl(?array $p): void
         </div>
       </div>
     </section>
+    <?php
+}
+
+/** Pisahkan paket berdasarkan jenis: ['Fiber' => [...], 'FWA' => [...]] */
+function paket_per_jenis(array $paket): array
+{
+    $out = array_fill_keys(array_keys(PAKET_JENIS), []);
+    foreach ($paket as $p) {
+        $out[paket_jenis($p)][] = $p;
+    }
+    return $out;
+}
+
+/** Dua kartu penjelasan: Fiber vs FWA. */
+function render_jenis_info(bool $withLinks = true): void
+{
+    ?>
+    <div class="jenis-grid">
+      <div class="jenis-card jenis-fiber reveal">
+        <div class="jenis-icon"><?= icon('cable', 34) ?></div>
+        <div>
+          <h3>Fiber (Jaringan Kabel)</h3>
+          <p>Internet rumah lewat kabel fiber optik. Paling stabil dan kencang, untuk alamat yang <strong>sudah tercover jaringan kabel</strong>.</p>
+          <?php if ($withLinks): ?><a href="#fiber">Lihat paket Fiber →</a><?php endif; ?>
+        </div>
+      </div>
+      <div class="jenis-card jenis-fwa reveal">
+        <div class="jenis-icon"><?= icon('modem', 34) ?></div>
+        <div>
+          <h3>FWA (Tanpa Kabel)</h3>
+          <p>Internet rumah tanpa tarik kabel, cukup pakai <strong>modem</strong>. Solusi untuk alamat yang <strong>belum tercover jaringan kabel</strong>.</p>
+          <?php if ($withLinks): ?><a href="#fwa">Lihat paket FWA →</a><?php endif; ?>
+        </div>
+      </div>
+    </div>
+    <p class="note text-center mt-2">Belum tahu alamatmu tercover kabel atau tidak? <a href="<?= e(wa_link('Halo, saya mau cek alamat saya tercover jaringan kabel (Fiber) atau pakai FWA.')) ?>" target="_blank" rel="noopener" data-track="wa">Cek gratis via WhatsApp</a>.</p>
     <?php
 }

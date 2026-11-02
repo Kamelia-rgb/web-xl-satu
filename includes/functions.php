@@ -153,8 +153,42 @@ function require_admin(): void
 
 // ---------- Data ----------
 
+/** Jenis produk: Fiber (jaringan kabel) atau FWA (tanpa kabel, pakai modem). */
+const PAKET_JENIS = [
+    'Fiber' => ['label' => 'Fiber (Jaringan Kabel)'],
+    'FWA'   => ['label' => 'FWA (Tanpa Kabel)'],
+];
+
+function paket_jenis(array $p): string
+{
+    $j = $p['jenis'] ?? '';
+    return isset(PAKET_JENIS[$j]) ? $j : 'Fiber';
+}
+
+/**
+ * Menambahkan kolom "jenis" otomatis untuk database yang di-import sebelum
+ * kolom ini ada, jadi tidak perlu menjalankan SQL manual.
+ */
+function ensure_paket_jenis(): void
+{
+    static $done = false;
+    if ($done) {
+        return;
+    }
+    $done = true;
+    try {
+        if (!db()->query("SHOW COLUMNS FROM paket LIKE 'jenis'")->fetch()) {
+            db()->exec("ALTER TABLE paket ADD COLUMN jenis VARCHAR(20) NOT NULL DEFAULT 'Fiber' AFTER id");
+            db()->exec("UPDATE paket SET jenis = 'FWA' WHERE nama LIKE 'FWA%'");
+        }
+    } catch (PDOException $ex) {
+        // Diabaikan: tampilan tetap jalan, semua paket dianggap Fiber.
+    }
+}
+
 function get_paket(bool $onlyActive = true): array
 {
+    ensure_paket_jenis();
     $sql = 'SELECT * FROM paket' . ($onlyActive ? ' WHERE aktif = 1' : '') . ' ORDER BY urutan ASC, harga ASC';
     return db()->query($sql)->fetchAll();
 }

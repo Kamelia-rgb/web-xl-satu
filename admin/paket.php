@@ -2,9 +2,10 @@
 require __DIR__ . '/../includes/bootstrap.php';
 require __DIR__ . '/../includes/admin.php';
 require_admin();
+ensure_paket_jenis();
 
 $empty = [
-    'id' => 0, 'kategori' => 'Internet Only', 'nama' => '', 'kecepatan' => '', 'kecepatan_coret' => '',
+    'id' => 0, 'jenis' => 'Fiber', 'kategori' => 'Internet Only', 'nama' => '', 'kecepatan' => '', 'kecepatan_coret' => '',
     'harga' => '', 'harga_coret' => '', 'periode_bulan' => 1, 'ppn_termasuk' => 1, 'biaya_instalasi' => 0,
     'maks_perangkat' => '', 'ideal_untuk' => '', 'benefit' => '', 'bonus' => '', 'label' => '',
     'unggulan' => 0, 'aktif' => 1, 'urutan' => 0,
@@ -31,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $data = [
+        'jenis'           => isset(PAKET_JENIS[$_POST['jenis'] ?? '']) ? $_POST['jenis'] : 'Fiber',
         'kategori'        => $text('kategori') ?: 'Internet Only',
         'nama'            => $text('nama'),
         'kecepatan'       => (int) ($_POST['kecepatan'] ?? 0),
@@ -100,6 +102,16 @@ if ($editing):
   <?= csrf_field() ?>
   <input type="hidden" name="id" value="<?= (int) $editing['id'] ?>">
 
+  <div class="form-row">
+    <label for="jenis">Jenis produk</label>
+    <select id="jenis" name="jenis">
+      <?php foreach (PAKET_JENIS as $key => $info): ?>
+        <option value="<?= e($key) ?>"<?= paket_jenis($editing) === $key ? ' selected' : '' ?>><?= e($info['label']) ?></option>
+      <?php endforeach; ?>
+    </select>
+    <p class="hint">Fiber = lewat jaringan kabel. FWA = tanpa kabel, pakai modem (untuk area yang belum tercover kabel).</p>
+  </div>
+
   <div class="form-row-2">
     <div class="form-row">
       <label for="kategori">Kategori</label>
@@ -163,11 +175,12 @@ else:
 </div>
 <div class="table-wrap">
   <table class="table">
-    <thead><tr><th>Urutan</th><th>Kategori</th><th>Paket</th><th>Harga</th><th>Status</th><th></th></tr></thead>
+    <thead><tr><th>Urutan</th><th>Jenis</th><th>Kategori</th><th>Paket</th><th>Harga</th><th>Status</th><th></th></tr></thead>
     <tbody>
     <?php foreach ($paket as $p): ?>
       <tr>
         <td><?= (int) $p['urutan'] ?></td>
+        <td><span class="badge <?= paket_jenis($p) === 'FWA' ? 'status-baru' : 'status-dihubungi' ?>"><?= e(paket_jenis($p)) ?></span></td>
         <td><span class="badge"><?= e($p['kategori']) ?></span></td>
         <td><strong><?= e(paket_judul($p)) ?></strong><?= $p['label'] ? ' <span class="badge status-baru">' . e($p['label']) . '</span>' : '' ?><?= $p['unggulan'] ? ' <span class="badge status-terpasang">Unggulan</span>' : '' ?></td>
         <td><?= e(rupiah($p['harga']) . periode_label($p)) ?><?= $p['harga_coret'] ? '<br><s class="note">' . e(rupiah($p['harga_coret'])) . '</s>' : '' ?></td>
@@ -181,7 +194,7 @@ else:
         </td>
       </tr>
     <?php endforeach; ?>
-    <?php if (!$paket): ?><tr><td colspan="6">Belum ada paket.</td></tr><?php endif; ?>
+    <?php if (!$paket): ?><tr><td colspan="7">Belum ada paket.</td></tr><?php endif; ?>
     </tbody>
   </table>
 </div>

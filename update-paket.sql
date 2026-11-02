@@ -17,3 +17,8 @@ INSERT INTO paket (kategori, nama, kecepatan, harga, harga_coret, periode_bulan,
 SELECT 'Internet Only', 'XL Satu Spark', 300, 265290, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 2
 FROM DUAL
 WHERE NOT EXISTS (SELECT 1 FROM paket WHERE nama = 'XL Satu Spark' AND kecepatan = 300);
+
+-- 4. Jenis produk: Fiber (jaringan kabel) atau FWA (tanpa kabel, modem)
+--    Catatan: web juga menambahkan kolom ini otomatis saat dibuka.
+ALTER TABLE paket ADD COLUMN IF NOT EXISTS jenis VARCHAR(20) NOT NULL DEFAULT 'Fiber' AFTER id;
+UPDATE paket SET jenis = 'FWA' WHERE nama LIKE 'FWA%';

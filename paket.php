@@ -2,12 +2,13 @@
 require __DIR__ . '/includes/bootstrap.php';
 
 $paket = get_paket();
+$perJenis = paket_per_jenis($paket);
 $speeds = array_column($paket, 'kecepatan');
 $range = $speeds ? min($speeds) . ' Mbps hingga ' . max($speeds) . ' Mbps' : '';
 
 $page = [
     'title'       => 'Daftar Paket Internet',
-    'description' => 'Daftar harga paket internet rumah ' . config('site_name') . ' terbaru: Internet Only, Internet + TV, dan paket bonus. Kecepatan ' . $range . ', pesan langsung via WhatsApp.',
+    'description' => 'Daftar harga paket internet rumah ' . config('site_name') . ' terbaru: paket Fiber (jaringan kabel) dan FWA (tanpa kabel, pakai modem). Kecepatan ' . $range . ', pesan langsung via WhatsApp.',
     'path'        => 'paket',
     'active'      => 'paket',
 ];
@@ -24,14 +25,46 @@ require __DIR__ . '/includes/header.php';
 
 <section class="section">
   <div class="container">
-    <?php if ($paket): ?>
-      <?php render_package_list($paket); ?>
-    <?php else: ?>
-      <div class="alert alert-info">Daftar paket sedang diperbarui. Silakan hubungi sales via WhatsApp untuk info terbaru.</div>
-    <?php endif; ?>
+    <div class="section-head">
+      <h2>Fiber atau FWA?</h2>
+      <p>Pilih jenis layanan sesuai jaringan yang tersedia di alamat kamu.</p>
+    </div>
+    <?php render_jenis_info(); ?>
+  </div>
+</section>
+
+<?php if (!$paket): ?>
+<section class="section" style="padding-top:0">
+  <div class="container"><div class="alert alert-info">Daftar paket sedang diperbarui. Silakan hubungi sales via WhatsApp untuk info terbaru.</div></div>
+</section>
+<?php endif; ?>
+
+<?php if ($perJenis['Fiber']): ?>
+<section class="section section-soft" id="fiber">
+  <div class="container">
+    <div class="section-head">
+      <span class="jenis-badge jenis-badge-fiber">Fiber · Jaringan Kabel</span>
+      <h2>Paket Fiber</h2>
+      <p>Untuk alamat yang sudah tercover jaringan kabel fiber optik.</p>
+    </div>
+    <?php render_package_list($perJenis['Fiber']); ?>
+  </div>
+</section>
+<?php endif; ?>
+
+<?php if ($perJenis['FWA']): ?>
+<section class="section" id="fwa">
+  <div class="container">
+    <div class="section-head">
+      <span class="jenis-badge jenis-badge-fwa">FWA · Tanpa Kabel</span>
+      <h2>Paket FWA</h2>
+      <p>Tanpa tarik kabel, cukup pakai modem. Untuk alamat yang belum tercover jaringan kabel.</p>
+    </div>
+    <?php render_package_list($perJenis['FWA']); ?>
     <p class="note text-center mt-2">Keterangan PPN tercantum di tiap paket. Harga dan benefit dapat berubah sewaktu-waktu sesuai ketentuan.</p>
   </div>
 </section>
+<?php endif; ?>
 
 <section class="section section-soft">
   <div class="container">

@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $old['alamat'],
                 $old['kota'] ?: null,
                 $selected['id'] ?? null,
-                $selected ? paket_judul($selected) . ' (' . $selected['kategori'] . ')' : null,
+                $selected ? paket_judul($selected) . ' (' . paket_jenis($selected) . ', ' . $selected['kategori'] . ')' : null,
                 $old['catatan'] ?: null,
                 $_SESSION['sumber'] ?? null,
                 'baru',
@@ -164,7 +164,7 @@ $cls = function (string $f) use ($errors): string {
               <option value="0">Belum tahu / minta saran</option>
               <?php foreach ($paket as $p): ?>
                 <option value="<?= (int) $p['id'] ?>"<?= (int) $old['paket_id'] === (int) $p['id'] ? ' selected' : '' ?>>
-                  <?= e(paket_judul($p) . ' – ' . rupiah($p['harga']) . periode_label($p) . ' (' . $p['kategori'] . ')') ?>
+                  <?= e(paket_judul($p) . ' – ' . rupiah($p['harga']) . periode_label($p) . ' (' . (paket_jenis($p) === 'FWA' ? 'FWA, ' : '') . $p['kategori'] . ')') ?>
                 </option>
               <?php endforeach; ?>
             </select>

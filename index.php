@@ -8,7 +8,10 @@ foreach ($paket as $p) {
     if ($p['unggulan']) { $unggulan = $p; break; }
 }
 $unggulan = $unggulan ?? ($paket[0] ?? null);
-$termurah = $paket ? min(array_column($paket, 'harga')) : null;
+$perJenis = paket_per_jenis($paket);
+$fiber = $perJenis['Fiber'];
+$fwa = $perJenis['FWA'];
+$termurah = $fiber ? min(array_column($fiber, 'harga')) : null;
 
 $page = [
     'title'       => '',
@@ -64,22 +67,46 @@ require __DIR__ . '/includes/header.php';
 </section>
 <?php endif; ?>
 
-<?php render_sekali_bayar($paket); ?>
-
 <section class="section" id="paket">
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">Paket internet</span>
       <h2>Pilihan paket sesuai kebutuhan internet rumah kamu</h2>
-      <?php if ($termurah): ?><p>Mulai dari <strong><?= e(rupiah($termurah)) ?></strong> per bulan. Tersedia Internet Only, Internet + TV, dan paket bonus.</p><?php endif; ?>
+      <p>Tersedia dua jenis layanan, sesuaikan dengan jaringan di alamat kamu.</p>
     </div>
-    <?php render_package_list(array_slice($paket, 0, 6), false); ?>
+    <?php render_jenis_info(false); ?>
+  </div>
+</section>
+
+<?php if ($fiber): ?>
+<section class="section section-soft" id="fiber">
+  <div class="container">
+    <div class="section-head">
+      <span class="jenis-badge jenis-badge-fiber">Fiber · Jaringan Kabel</span>
+      <h2>Paket Fiber</h2>
+      <?php if ($termurah): ?><p>Mulai dari <strong><?= e(rupiah($termurah)) ?></strong> per bulan. Untuk alamat yang sudah tercover jaringan kabel.</p><?php endif; ?>
+    </div>
+    <?php render_package_list(array_slice($fiber, 0, 6), false); ?>
     <div class="text-center mt-3">
-      <a class="btn btn-primary" href="<?= e(url('paket')) ?>">Lihat Semua <?= count($paket) ?> Paket</a>
+      <a class="btn btn-primary" href="<?= e(url('paket#fiber')) ?>">Lihat Semua <?= count($fiber) ?> Paket Fiber</a>
     </div>
+  </div>
+</section>
+<?php endif; ?>
+
+<?php if ($fwa): ?>
+<section class="section" id="fwa">
+  <div class="container">
+    <div class="section-head">
+      <span class="jenis-badge jenis-badge-fwa">FWA · Tanpa Kabel</span>
+      <h2>Belum Tercover Kabel? Pakai FWA</h2>
+      <p>Internet rumah tanpa tarik kabel, cukup pakai modem. Pilihan untuk alamat yang belum terjangkau jaringan kabel.</p>
+    </div>
+    <?php render_package_list($fwa, false); ?>
     <p class="note text-center mt-2">Harga dapat berubah sewaktu-waktu. Hubungi sales untuk info harga &amp; promo terbaru di area kamu.</p>
   </div>
 </section>
+<?php endif; ?>
 
 <?php render_keunggulan(); ?>
 
