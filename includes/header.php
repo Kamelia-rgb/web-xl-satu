@@ -102,7 +102,6 @@ fbq('track', 'PageView');
           <li><a href="<?= e(url($slug)) ?>"<?= $active === $slug ? ' aria-current="page"' : '' ?>><?= e($label) ?></a></li>
         <?php endforeach; ?>
       </ul>
-      <a class="btn btn-wa btn-sm nav-cta" href="<?= e(wa_link('Halo, saya ingin tanya-tanya soal pemasangan internet ' . $siteName . '.')) ?>" target="_blank" rel="noopener" data-track="wa">Chat WhatsApp</a>
     </nav>
   </div>
 </header>

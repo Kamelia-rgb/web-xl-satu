@@ -161,3 +161,46 @@ document.querySelectorAll('[data-pkg-filter]').forEach(function (wrap) {
   window.addEventListener('resize', onScroll);
   update();
 })();
+
+// ---------- Menu: efek gelombang saat diklik ----------
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.main-nav a').forEach(function (link) {
+    link.addEventListener('click', function (ev) {
+      if (reduce || ev.button !== 0 || ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.altKey) return;
+      var rect = link.getBoundingClientRect();
+      var size = Math.max(rect.width, rect.height) * 2;
+      var dot = document.createElement('span');
+      dot.className = 'nav-ripple';
+      dot.style.width = dot.style.height = size + 'px';
+      dot.style.left = (ev.clientX - rect.left - size / 2) + 'px';
+      dot.style.top = (ev.clientY - rect.top - size / 2) + 'px';
+      link.appendChild(dot);
+      setTimeout(function () { dot.remove(); }, 500);
+      // Beri waktu sebentar supaya animasinya terlihat sebelum pindah halaman
+      var href = link.getAttribute('href');
+      if (href && link.target !== '_blank') {
+        ev.preventDefault();
+        setTimeout(function () { window.location.href = href; }, 180);
+      }
+    });
+  });
+})();
+
+// ---------- Gelembung "Yuk daftar lebih cepat dengan WhatsApp!" ----------
+(function () {
+  var hint = document.querySelector('.wa-hint');
+  if (!hint) return;
+  var KEY = 'waHintClosed';
+  var closed = false;
+  try { closed = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
+  if (closed) return;
+  setTimeout(function () { hint.hidden = false; }, 1200);
+  var btn = hint.querySelector('.wa-hint-close');
+  if (btn) {
+    btn.addEventListener('click', function () {
+      hint.hidden = true;
+      try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+    });
+  }
+})();
