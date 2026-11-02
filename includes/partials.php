@@ -1,33 +1,154 @@
 <?php
 /** Potongan tampilan yang dipakai di beberapa halaman. */
 
+const PAKET_KATEGORI = ['Internet Only', 'Internet + TV', 'Internet + Bonus'];
+
+function slugify(string $text): string
+{
+    return trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($text)), '-');
+}
+
+/** "/bulan" atau "/3 bulan" */
+function periode_label(array $p): string
+{
+    $n = max(1, (int) ($p['periode_bulan'] ?? 1));
+    return $n === 1 ? '/bulan' : '/' . $n . ' bulan';
+}
+
+function paket_judul(array $p): string
+{
+    return (int) $p['kecepatan'] . ' Mbps ' . $p['nama'];
+}
+
 function wa_message_paket(array $p): string
 {
-    return 'Halo, saya tertarik pasang ' . $p['nama'] . ' ' . $p['kecepatan'] . ' Mbps (' . rupiah($p['harga']) . '/bulan). Apakah alamat saya bisa dipasang?';
+    return 'Halo, saya tertarik pasang ' . $p['nama'] . ' ' . (int) $p['kecepatan'] . ' Mbps (' . rupiah($p['harga']) . periode_label($p) . '). Apakah alamat saya bisa dipasang?';
+}
+
+/** Perkiraan jumlah perangkat bila tidak diisi di admin. */
+function paket_perangkat(array $p): int
+{
+    if (!empty($p['maks_perangkat'])) {
+        return (int) $p['maks_perangkat'];
+    }
+    $speed = (int) $p['kecepatan'];
+    foreach ([20 => 4, 50 => 6, 100 => 8, 150 => 9, 250 => 10, 300 => 12, 350 => 13, 400 => 14, 500 => 16, 600 => 18] as $max => $devices) {
+        if ($speed <= $max) {
+            return $devices;
+        }
+    }
+    return 25;
+}
+
+/** Label "Ideal untuk kamu": dari admin, atau otomatis sesuai kecepatan. */
+function paket_ideal(array $p): array
+{
+    $custom = array_values(array_filter(array_map('trim', preg_split('/[,\n]/', (string) ($p['ideal_untuk'] ?? '')))));
+    if ($custom) {
+        return $custom;
+    }
+    $s = (int) $p['kecepatan'];
+    $tags = ['Browsing', 'Sosial Media'];
+    $tags[] = $s >= 100 ? 'Streaming 4K' : 'Streaming HD';
+    $tags[] = $s >= 300 ? 'Video Conference 4K' : 'Video Conference HD';
+    if ($s >= 100) $tags[] = 'Game Online';
+    if ($s >= 400) $tags[] = 'Smart Home';
+    elseif ($s >= 150) $tags[] = 'CCTV / Smart Device';
+    return $tags;
+}
+
+/** Isi bar kecepatan (7 segmen), skala logaritmik 10–1000 Mbps. */
+function speed_segments(int $speed, int $count = 7): array
+{
+    $fill = max(0.08, min(1, log(max($speed, 10) / 10) / log(100))) * $count;
+    $out = [];
+    for ($i = 0; $i < $count; $i++) {
+        $out[] = (int) round(max(0, min(1, $fill - $i)) * 100);
+    }
+    return $out;
 }
 
 function render_package_card(array $p): void
 {
-    $benefits = lines((string) $p['benefit']);
+    $kategori = $p['kategori'] ?: 'Internet Only';
+    $hasOldPrice = !empty($p['harga_coret']) && $p['harga_coret'] > $p['harga'];
+    $hasOldSpeed = !empty($p['kecepatan_coret']) && $p['kecepatan_coret'] < $p['kecepatan'];
+    $periode = periode_label($p);
     ?>
-    <article class="package<?= $p['unggulan'] ? ' featured' : '' ?>">
-      <?php if (!empty($p['label'])): ?><span class="package-badge"><?= e($p['label']) ?></span><?php endif; ?>
-      <h3 class="package-name"><?= e($p['nama']) ?></h3>
-      <p class="package-speed"><?= (int) $p['kecepatan'] ?> <small>Mbps</small></p>
-      <?php if (!empty($p['harga_coret']) && $p['harga_coret'] > $p['harga']): ?>
-        <span class="package-old"><?= e(rupiah($p['harga_coret'])) ?></span>
-      <?php endif; ?>
-      <p class="package-price"><?= e(rupiah($p['harga'])) ?> <small>/bulan</small></p>
-      <?php if ($benefits): ?>
-        <ul class="package-benefits">
-          <?php foreach ($benefits as $b): ?><li><?= e($b) ?></li><?php endforeach; ?>
+    <article class="pkg pkg-<?= e(slugify($kategori)) ?><?= $p['unggulan'] ? ' is-featured' : '' ?>" data-kategori="<?= e(slugify($kategori)) ?>">
+      <div class="pkg-head">
+        <div class="pkg-head-top">
+          <span class="pkg-cat"><?= e($kategori) ?></span>
+          <?php if (!empty($p['label'])): ?><span class="pkg-ribbon"><?= e($p['label']) ?></span><?php endif; ?>
+        </div>
+        <h3 class="pkg-title"><?= (int) $p['kecepatan'] ?> Mbps <?= e($p['nama']) ?></h3>
+      </div>
+
+      <div class="pkg-body">
+        <div class="speedbar" aria-hidden="true">
+          <?php foreach (speed_segments((int) $p['kecepatan']) as $i => $pct): ?>
+            <span><i style="width:<?= $pct ?>%"></i></span>
+          <?php endforeach; ?>
+        </div>
+
+        <div class="pkg-speed">
+          <span class="pkg-speed-label">Kecepatan internet<?= $hasOldSpeed ? ' dengan Speed Booster' : ' hingga' ?></span>
+          <span class="pkg-speed-val">
+            <?php if ($hasOldSpeed): ?><s><?= (int) $p['kecepatan_coret'] ?> <small>Mbps</small></s><?php endif; ?>
+            <strong><?= (int) $p['kecepatan'] ?></strong> <small>Mbps</small>
+          </span>
+        </div>
+
+        <p class="pkg-sub">Ideal untuk kamu</p>
+        <ul class="tags">
+          <?php foreach (paket_ideal($p) as $tag): ?><li><?= e($tag) ?></li><?php endforeach; ?>
         </ul>
-      <?php else: ?><div style="flex:1"></div><?php endif; ?>
-      <div class="package-actions">
-        <a class="btn btn-wa" href="<?= e(wa_link(wa_message_paket($p))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e($p['nama']) ?>">Pesan via WhatsApp</a>
-        <a class="btn btn-outline btn-sm" href="<?= e(url('kontak?paket=' . (int) $p['id'] . '#daftar')) ?>">Isi Formulir Pendaftaran</a>
+
+        <ul class="pkg-feats">
+          <li><?= icon('devices') ?><span>Hingga <?= paket_perangkat($p) ?> Perangkat</span></li>
+          <li><?= icon('router') ?><span><?= (int) $p['biaya_instalasi'] > 0 ? 'Biaya Instalasi ' . e(rupiah($p['biaya_instalasi'])) : 'Gratis Biaya Instalasi' ?></span></li>
+          <li><?= icon('receipt') ?><span><?= !empty($p['ppn_termasuk']) ? 'Termasuk PPN 11%' : 'Belum Termasuk PPN 11%' ?></span></li>
+          <?php foreach (lines((string) $p['benefit']) as $b): ?>
+            <li><?= icon('gauge') ?><span><?= e($b) ?></span></li>
+          <?php endforeach; ?>
+        </ul>
+
+        <?php if (!empty($p['bonus'])): ?>
+          <div class="pkg-bonus"><?= icon('gift') ?><span><?= e($p['bonus']) ?></span></div>
+        <?php endif; ?>
+
+        <div class="pkg-price">
+          <p class="pkg-from">Mulai dari<?php if ($hasOldPrice): ?> <s><?= e(rupiah($p['harga_coret']) . $periode) ?></s><?php endif; ?></p>
+          <p class="pkg-amount"><?= e(rupiah($p['harga'])) ?><small><?= e($periode) ?></small></p>
+        </div>
+
+        <div class="pkg-actions">
+          <a class="btn btn-wa" href="<?= e(wa_link(wa_message_paket($p))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e(paket_judul($p)) ?>"><?= icon('chat', 18) ?> Chat WA</a>
+          <a class="btn btn-primary" href="<?= e(url('kontak?paket=' . (int) $p['id'] . '#daftar')) ?>"><?= icon('edit', 18) ?> Isi Form</a>
+        </div>
       </div>
     </article>
+    <?php
+}
+
+/** Tab filter kategori + daftar kartu paket. */
+function render_package_list(array $paket, bool $withTabs = true): void
+{
+    $cats = array_values(array_unique(array_map(fn ($p) => $p['kategori'] ?: 'Internet Only', $paket)));
+    ?>
+    <div class="pkg-wrap" data-pkg-filter>
+      <?php if ($withTabs && count($cats) > 1): ?>
+        <div class="pkg-tabs" role="tablist" aria-label="Kategori paket">
+          <button type="button" role="tab" aria-selected="true" data-filter="">Semua</button>
+          <?php foreach ($cats as $c): ?>
+            <button type="button" role="tab" aria-selected="false" data-filter="<?= e(slugify($c)) ?>"><?= e($c) ?></button>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+      <div class="pkg-grid">
+        <?php foreach ($paket as $p) { render_package_card($p); } ?>
+      </div>
+    </div>
     <?php
 }
 
@@ -53,7 +174,7 @@ function render_promo_slider(array $promos): void
     <?php
 }
 
-function icon(string $name): string
+function icon(string $name, int $size = 26): string
 {
     $paths = [
         'speed'   => '<path d="M12 14l4-4"/><path d="M3.3 17a9 9 0 1 1 17.4 0"/>',
@@ -68,8 +189,14 @@ function icon(string $name): string
         'shield'  => '<path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6Z"/><path d="M9 12l2 2 4-4"/>',
         'tv'      => '<rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/>',
         'game'    => '<rect x="2.5" y="7" width="19" height="10" rx="5"/><path d="M7 12h3M8.5 10.5v3"/><circle cx="16" cy="11" r=".8"/><circle cx="17.5" cy="13" r=".8"/>',
+        'devices' => '<rect x="2.5" y="6" width="12" height="15" rx="1.5"/><path d="M7 3.5h12.5a1.5 1.5 0 0 1 1.5 1.5v13"/>',
+        'router'  => '<rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 16.5h.01M11 16.5h.01"/><path d="M8 13V9M16 13V9"/><path d="M13.5 5.5a3 3 0 0 1 5 0M12 3a6 6 0 0 1 8 0"/>',
+        'receipt' => '<path d="M6 2.5h12v19l-3-2-3 2-3-2-3 2Z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+        'gauge'   => '<path d="M12 14l3.5-3.5"/><path d="M4.2 18.5a9 9 0 1 1 15.6 0"/><path d="M12 5.5V7M5.5 12H7M17 12h1.5"/>',
+        'gift'    => '<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13"/><path d="M12 8S10.5 3.5 8 3.5a2.2 2.2 0 0 0 0 4.5h4Zm0 0s1.5-4.5 4-4.5a2.2 2.2 0 0 1 0 4.5h-4Z"/>',
+        'edit'    => '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
     ];
-    return '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . ($paths[$name] ?? '') . '</svg>';
+    return '<svg viewBox="0 0 24 24" width="' . $size . '" height="' . $size . '" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . ($paths[$name] ?? '') . '</svg>';
 }
 
 function render_faq(): void

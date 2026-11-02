@@ -21,7 +21,7 @@ Website promosi internet rumah XL Satu untuk sales. Dibuat dengan **PHP + MySQL*
 
 **Halaman admin (`/admin`)**
 - Daftar calon pelanggan, dengan filter status, pencarian, catatan sales, tombol chat WA, dan export ke Excel (CSV)
-- Kelola paket (harga, harga coret, benefit, label "Terlaris", paket unggulan)
+- Kelola paket: kategori (Internet Only / Internet + TV / Internet + Bonus), kecepatan dan Speed Booster, harga dan harga coret, periode (per bulan atau per 3 bulan), PPN, biaya instalasi, bonus, label "Terlaris", paket unggulan
 - Kelola promo dan upload gambar banner (otomatis hilang setelah tanggal berakhir)
 - Kelola akun (satu akun per sales)
 
@@ -38,6 +38,8 @@ Pilih paket hosting yang sudah termasuk **domain .com gratis 1 tahun** dan **SSL
 3. Buat user database dan password-nya
 4. Tambahkan user tersebut ke database dengan **ALL PRIVILEGES**
 5. Buka **phpMyAdmin**, pilih database tadi, buka tab **Import**, lalu pilih file `database.sql` dan klik **Go**
+
+> **Sudah pernah import `database.sql` versi lama?** Di phpMyAdmin hapus (Drop) tabel `paket`, lalu import ulang `database.sql`. Tabel lain tidak berubah, jadi data lain aman.
 
 ### 3. Upload file
 1. Download repo ini sebagai ZIP (tombol **Code → Download ZIP** di GitHub)

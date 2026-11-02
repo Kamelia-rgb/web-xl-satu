@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $old['alamat'],
                 $old['kota'] ?: null,
                 $selected['id'] ?? null,
-                $selected ? $selected['nama'] . ' ' . $selected['kecepatan'] . ' Mbps' : null,
+                $selected ? paket_judul($selected) . ' (' . $selected['kategori'] . ')' : null,
                 $old['catatan'] ?: null,
                 $_SESSION['sumber'] ?? null,
                 'baru',
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['lead_done'] = [
             'nama'   => $old['nama'],
             'alamat' => $old['alamat'] . ($old['kota'] ? ', ' . $old['kota'] : ''),
-            'paket'  => $selected ? $selected['nama'] . ' ' . $selected['kecepatan'] . ' Mbps' : '',
+            'paket'  => $selected ? paket_judul($selected) . ' – ' . rupiah($selected['harga']) . periode_label($selected) : '',
         ];
         redirect('terima-kasih');
     }
@@ -160,7 +160,7 @@ $cls = fn (string $f) => isset($errors[$f]) ? ' has-error' : '';
               <option value="0">Belum tahu / minta saran</option>
               <?php foreach ($paket as $p): ?>
                 <option value="<?= (int) $p['id'] ?>"<?= (int) $old['paket_id'] === (int) $p['id'] ? ' selected' : '' ?>>
-                  <?= e($p['nama'] . ' – ' . $p['kecepatan'] . ' Mbps (' . rupiah($p['harga']) . ')') ?>
+                  <?= e(paket_judul($p) . ' – ' . rupiah($p['harga']) . periode_label($p) . ' (' . $p['kategori'] . ')') ?>
                 </option>
               <?php endforeach; ?>
             </select>

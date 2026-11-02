@@ -1,7 +1,7 @@
 -- =========================================================
 -- Database website XL SATU
 -- Import file ini lewat cPanel > phpMyAdmin > Import
--- Data paket & promo di bawah hanya CONTOH, ubah lewat halaman admin.
+-- Data paket mengikuti daftar harga XL Satu; data promo masih CONTOH. Semua bisa diubah lewat halaman admin.
 -- =========================================================
 
 SET NAMES utf8mb4;
@@ -15,11 +15,19 @@ CREATE TABLE IF NOT EXISTS admin_users (
 
 CREATE TABLE IF NOT EXISTS paket (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  kategori VARCHAR(40) NOT NULL DEFAULT 'Internet Only' COMMENT 'Internet Only / Internet + TV / Internet + Bonus',
   nama VARCHAR(100) NOT NULL,
   kecepatan INT UNSIGNED NOT NULL COMMENT 'Mbps',
-  harga INT UNSIGNED NOT NULL COMMENT 'Rupiah per bulan',
+  kecepatan_coret INT UNSIGNED NULL COMMENT 'Kecepatan sebelum Speed Booster (boleh kosong)',
+  harga INT UNSIGNED NOT NULL COMMENT 'Rupiah per periode',
   harga_coret INT UNSIGNED NULL COMMENT 'Harga normal sebelum promo (boleh kosong)',
-  benefit TEXT NULL COMMENT 'Satu benefit per baris',
+  periode_bulan TINYINT UNSIGNED NOT NULL DEFAULT 1 COMMENT '1 = per bulan, 3 = per 3 bulan',
+  ppn_termasuk TINYINT(1) NOT NULL DEFAULT 1,
+  biaya_instalasi INT UNSIGNED NOT NULL DEFAULT 0 COMMENT '0 = gratis',
+  maks_perangkat SMALLINT UNSIGNED NULL COMMENT 'Kosong = dihitung otomatis dari kecepatan',
+  ideal_untuk VARCHAR(255) NULL COMMENT 'Dipisah koma. Kosong = otomatis dari kecepatan',
+  benefit TEXT NULL COMMENT 'Keterangan tambahan, satu per baris',
+  bonus VARCHAR(255) NULL,
   label VARCHAR(40) NULL COMMENT 'Contoh: Terlaris, Hemat',
   unggulan TINYINT(1) NOT NULL DEFAULT 0,
   aktif TINYINT(1) NOT NULL DEFAULT 1,
@@ -54,12 +62,23 @@ CREATE TABLE IF NOT EXISTS leads (
   INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ---------- Contoh paket ----------
-INSERT INTO paket (nama, kecepatan, harga, harga_coret, benefit, label, unggulan, aktif, urutan) VALUES
-('Paket Hemat', 30, 229000, 269000, 'Internet unlimited tanpa FUP\nCocok untuk 3–5 perangkat\nGratis pemasangan\nModem WiFi dipinjamkan', NULL, 0, 1, 1),
-('Paket Keluarga', 50, 289000, 339000, 'Internet unlimited tanpa FUP\nCocok untuk 5–8 perangkat\nGratis pemasangan\nBonus kuota XL di HP', 'Terlaris', 1, 1, 2),
-('Paket Streaming', 100, 389000, 449000, 'Internet unlimited tanpa FUP\nCocok untuk 8–12 perangkat\nStreaming & gaming lancar\nBonus kuota XL di HP', NULL, 0, 1, 3),
-('Paket Ultra', 200, 589000, 659000, 'Internet unlimited tanpa FUP\nCocok untuk rumah besar & usaha\nPrioritas layanan teknisi\nBonus kuota XL di HP', 'Paling Ngebut', 0, 1, 4);
+-- ---------- Paket (sesuai daftar harga, ubah lewat halaman admin) ----------
+INSERT INTO paket (kategori, nama, kecepatan, harga, harga_coret, periode_bulan, ppn_termasuk, biaya_instalasi, benefit, bonus, label, unggulan, aktif, urutan) VALUES
+('Internet Only', 'XL Satu Starter', 20, 205000, NULL, 1, 1, 111000, NULL, NULL, NULL, 0, 1, 1),
+('Internet Only', 'XL Satu Spark', 250, 254000, NULL, 1, 1, 0, NULL, NULL, 'Terlaris', 1, 1, 2),
+('Internet Only', 'XL Satu Spark', 350, 309000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 3),
+('Internet Only', 'XL Satu Spark', 400, 333000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 4),
+('Internet + TV', 'Joy Value', 100, 388000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 5),
+('Internet + TV', 'Joy Pro', 150, 471000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 6),
+('Internet Only', 'XL Satu Spark', 600, 555000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 7),
+('Internet + TV', 'Joy Premium', 200, 749000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 8),
+('Internet + TV', 'XL Satu Spark', 1000, 999000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 9),
+('Internet + TV', 'Star Value', 300, 1093000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 10),
+('Internet + TV', 'Star Pro', 500, 2053000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 11),
+('Internet + TV', 'Star Premium', 1000, 4993000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 12),
+('Internet Only', 'FWA Bulanan', 100, 219000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 13),
+('Internet + Bonus', 'FWA 3 Bulanan', 100, 650000, 942000, 3, 0, 0, 'Bulan ke-4 dst Rp219.000/bulan', 'Bonus nonton 3 bulan: Vidio Lite & Catchplay+', 'Hemat', 0, 1, 14),
+('Internet + Bonus', 'FWA 4 Bulanan', 50, 650000, 1085000, 4, 0, 0, 'Bulan ke-5 dst Rp200.000/bulan', 'Bonus nonton 3 bulan: Vidio Lite & Catchplay+', 'Hemat', 0, 1, 15);
 
 -- ---------- Contoh promo ----------
 INSERT INTO promo (judul, deskripsi, gambar, berlaku_sampai, tampil_banner, aktif, urutan) VALUES

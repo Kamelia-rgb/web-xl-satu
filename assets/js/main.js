@@ -82,3 +82,16 @@
     }
   });
 })();
+
+// ---------- Filter kategori paket ----------
+document.querySelectorAll('[data-pkg-filter]').forEach(function (wrap) {
+  var buttons = wrap.querySelectorAll('[data-filter]');
+  var cards = wrap.querySelectorAll('.pkg');
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var f = btn.getAttribute('data-filter');
+      buttons.forEach(function (b) { b.setAttribute('aria-selected', b === btn ? 'true' : 'false'); });
+      cards.forEach(function (c) { c.hidden = !!f && c.getAttribute('data-kategori') !== f; });
+    });
+  });
+});

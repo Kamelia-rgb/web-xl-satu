@@ -39,15 +39,18 @@ require __DIR__ . '/includes/header.php';
     <?php if ($unggulan): ?>
     <div class="hero-card">
       <p class="eyebrow"><?= e($unggulan['label'] ?: 'Paket Pilihan') ?></p>
-      <h2 style="font-size:1.35rem;margin:0"><?= e($unggulan['nama']) ?> · <?= (int) $unggulan['kecepatan'] ?> Mbps</h2>
-      <p class="price-big"><?= e(rupiah($unggulan['harga'])) ?> <small>/bulan</small></p>
+      <h2 style="font-size:1.35rem;margin:0"><?= e(paket_judul($unggulan)) ?></h2>
+      <p class="price-big"><?= e(rupiah($unggulan['harga'])) ?> <small><?= e(periode_label($unggulan)) ?></small></p>
       <?php if (!empty($unggulan['harga_coret']) && $unggulan['harga_coret'] > $unggulan['harga']): ?>
         <p class="price-from">Harga normal <s><?= e(rupiah($unggulan['harga_coret'])) ?></s></p>
       <?php endif; ?>
       <ul>
-        <?php foreach (array_slice(lines((string) $unggulan['benefit']), 0, 4) as $b): ?><li><?= e($b) ?></li><?php endforeach; ?>
+        <li>Hingga <?= paket_perangkat($unggulan) ?> perangkat</li>
+        <li><?= (int) $unggulan['biaya_instalasi'] > 0 ? 'Biaya instalasi ' . e(rupiah($unggulan['biaya_instalasi'])) : 'Gratis biaya instalasi' ?></li>
+        <li><?= $unggulan['ppn_termasuk'] ? 'Sudah termasuk PPN 11%' : 'Belum termasuk PPN 11%' ?></li>
+        <li>Ideal untuk <?= e(implode(', ', array_slice(paket_ideal($unggulan), 2, 3))) ?></li>
       </ul>
-      <a class="btn btn-primary btn-block" href="<?= e(wa_link(wa_message_paket($unggulan))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e($unggulan['nama']) ?>">Ambil Paket Ini</a>
+      <a class="btn btn-primary btn-block" href="<?= e(wa_link(wa_message_paket($unggulan))) ?>" target="_blank" rel="noopener" data-track="wa" data-paket="<?= e(paket_judul($unggulan)) ?>">Ambil Paket Ini</a>
     </div>
     <?php endif; ?>
   </div>
@@ -81,11 +84,12 @@ require __DIR__ . '/includes/header.php';
   <div class="container">
     <div class="section-head">
       <span class="eyebrow">Paket internet</span>
-      <h2>Pilih kecepatan sesuai kebutuhan</h2>
-      <?php if ($termurah): ?><p>Mulai dari <strong><?= e(rupiah($termurah)) ?></strong> per bulan. Semua paket unlimited.</p><?php endif; ?>
+      <h2>Pilihan paket sesuai kebutuhan internet rumah kamu</h2>
+      <?php if ($termurah): ?><p>Mulai dari <strong><?= e(rupiah($termurah)) ?></strong> per bulan. Tersedia Internet Only, Internet + TV, dan paket bonus.</p><?php endif; ?>
     </div>
-    <div class="packages">
-      <?php foreach ($paket as $p) { render_package_card($p); } ?>
+    <?php render_package_list(array_slice($paket, 0, 6), false); ?>
+    <div class="text-center mt-3">
+      <a class="btn btn-primary" href="<?= e(url('paket')) ?>">Lihat Semua <?= count($paket) ?> Paket</a>
     </div>
     <p class="note text-center mt-2">Harga dapat berubah sewaktu-waktu. Hubungi sales untuk info harga &amp; promo terbaru di area kamu.</p>
   </div>
