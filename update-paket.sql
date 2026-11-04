@@ -47,6 +47,9 @@ DELETE FROM paket WHERE nama = 'XL Satu Spark' AND kecepatan = 350;
 -- 10. Paket FWA baru sesuai brosur (semua sudah termasuk PPN)
 DELETE FROM paket WHERE jenis = 'FWA';
 INSERT INTO paket (jenis, kategori, nama, kecepatan, harga, harga_coret, periode_bulan, ppn_termasuk, biaya_instalasi, benefit, bonus, label, unggulan, aktif, urutan) VALUES
-('FWA', 'Per Bulan', 'FWA Per Bulan', 100, 243090, NULL, 1, 1, 0, NULL, 'Free Vidio Lite & CATCHPLAY+ 3 bulan', 'Best Value', 0, 1, 13),
+('FWA', 'Per Bulan', 'FWA Per Bulan', 100, 243090, NULL, 1, 1, 0, NULL, NULL, 'Best Value', 0, 1, 13),
 ('FWA', 'Hemat 4 Bulan (Bayar di Muka)', 'FWA Hemat 4 Bulan', 50, 721500, NULL, 4, 1, 0, 'Setara Rp180.000/bulan', 'Free Vidio Lite & CATCHPLAY+ 3 bulan', 'Hemat', 0, 1, 14),
 ('FWA', 'Hemat 4 Bulan (Bayar di Muka)', 'FWA Hemat 4 Bulan', 100, 876900, NULL, 4, 1, 0, 'Setara Rp219.009/bulan', 'Free Vidio Lite & CATCHPLAY+ 3 bulan', 'Hemat', 0, 1, 15);
+
+-- 11. Paket FWA Per Bulan tidak mendapat bonus Vidio Lite & CATCHPLAY+
+UPDATE paket SET bonus = NULL WHERE nama = 'FWA Per Bulan' AND kecepatan = 100;

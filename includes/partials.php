@@ -434,8 +434,8 @@ function render_fwa_keunggulan(): void
         ['wifi', 'Tanpa Tarik Kabel', 'Cocok untuk alamat yang belum tercover jaringan kabel.'],
     ];
     $kanan = [
-        ['tv', 'Free Vidio Lite 3 Bulan', 'Nonton film, series, dan olahraga favorit.'],
-        ['gift', 'Free CATCHPLAY+ 3 Bulan', 'Akses film-film pilihan tanpa biaya tambahan.'],
+        ['tv', 'Free Vidio Lite 3 Bulan', 'Khusus paket Hemat 4 Bulan. Nonton film, series, dan olahraga.'],
+        ['gift', 'Free CATCHPLAY+ 3 Bulan', 'Khusus paket Hemat 4 Bulan. Akses film-film pilihan.'],
         ['router', 'Memakai 2 Alat', 'Perangkat outdoor dan indoor untuk sinyal lebih maksimal.'],
     ];
     $item = function (array $it): void {
