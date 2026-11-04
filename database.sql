@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS admin_users (
 CREATE TABLE IF NOT EXISTS paket (
   id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   jenis VARCHAR(20) NOT NULL DEFAULT 'Fiber' COMMENT 'Fiber = jaringan kabel, FWA = tanpa kabel (modem)',
-  kategori VARCHAR(40) NOT NULL DEFAULT 'Internet Only' COMMENT 'Internet Only / Internet + TV + Kuota Keluarga / Internet + Bonus',
+  kategori VARCHAR(40) NOT NULL DEFAULT 'Internet Only' COMMENT 'Internet Only / Internet + TV + Kuota Keluarga / Per Bulan / Hemat 4 Bulan (Bayar di Muka)',
   nama VARCHAR(100) NOT NULL,
   kecepatan INT UNSIGNED NOT NULL COMMENT 'Mbps',
   kecepatan_coret INT UNSIGNED NULL COMMENT 'Kecepatan sebelum Speed Booster (boleh kosong)',
@@ -69,7 +69,6 @@ INSERT INTO paket (jenis, kategori, nama, kecepatan, harga, harga_coret, periode
 ('Fiber', 'Internet Only', 'XL Satu Starter', 20, 205000, NULL, 1, 1, 111000, NULL, NULL, NULL, 0, 1, 1),
 ('Fiber', 'Internet Only', 'XL Satu Spark', 250, 254000, NULL, 1, 1, 0, NULL, NULL, 'Terlaris', 1, 1, 2),
 ('Fiber', 'Internet Only', 'XL Satu Spark', 300, 265290, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 2),
-('Fiber', 'Internet Only', 'XL Satu Spark', 350, 309000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 3),
 ('Fiber', 'Internet Only', 'XL Satu Spark', 400, 333000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 4),
 ('Fiber', 'Internet + TV + Kuota Keluarga', 'Joy Value', 100, 388000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 5),
 ('Fiber', 'Internet + TV + Kuota Keluarga', 'Joy Pro', 150, 471000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 6),
@@ -79,9 +78,9 @@ INSERT INTO paket (jenis, kategori, nama, kecepatan, harga, harga_coret, periode
 ('Fiber', 'Internet + TV + Kuota Keluarga', 'Star Value', 300, 1093000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 10),
 ('Fiber', 'Internet + TV + Kuota Keluarga', 'Star Pro', 500, 2053000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 11),
 ('Fiber', 'Internet + TV + Kuota Keluarga', 'Star Premium', 1000, 4993000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 12),
-('FWA', 'Internet + Bonus', 'FWA Bulanan', 100, 219000, NULL, 1, 1, 0, NULL, NULL, NULL, 0, 1, 13),
-('FWA', 'Internet + Bonus', 'FWA 3 Bulanan', 100, 650000, 942000, 3, 0, 0, 'Bulan ke-4 dst Rp219.000/bulan', 'Bonus nonton 3 bulan: Vidio Lite & Catchplay+', 'Hemat', 0, 1, 14),
-('FWA', 'Internet + Bonus', 'FWA 4 Bulanan', 50, 650000, 1085000, 4, 0, 0, 'Bulan ke-5 dst Rp200.000/bulan', 'Bonus nonton 3 bulan: Vidio Lite & Catchplay+', 'Hemat', 0, 1, 15);
+('FWA', 'Per Bulan', 'FWA Per Bulan', 100, 243090, NULL, 1, 1, 0, NULL, 'Free Vidio Lite & CATCHPLAY+ 3 bulan', 'Best Value', 0, 1, 13),
+('FWA', 'Hemat 4 Bulan (Bayar di Muka)', 'FWA Hemat 4 Bulan', 50, 721500, NULL, 4, 1, 0, 'Setara Rp180.000/bulan', 'Free Vidio Lite & CATCHPLAY+ 3 bulan', 'Hemat', 0, 1, 14),
+('FWA', 'Hemat 4 Bulan (Bayar di Muka)', 'FWA Hemat 4 Bulan', 100, 876900, NULL, 4, 1, 0, 'Setara Rp219.009/bulan', 'Free Vidio Lite & CATCHPLAY+ 3 bulan', 'Hemat', 0, 1, 15);
 
 -- ---------- Detail paket Internet + TV (channel, bonus kuota, pemasangan) ----------
 UPDATE paket SET harga = 388500, ideal_untuk = 'Cocok untuk WFH dan Online Shop, Video Conference 4K, Game Online HD, Streaming 4K, Multi Device, TV Kabel',

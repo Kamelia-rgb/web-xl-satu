@@ -1,7 +1,7 @@
 <?php
 /** Potongan tampilan yang dipakai di beberapa halaman. */
 
-const PAKET_KATEGORI = ['Internet Only', 'Internet + TV + Kuota Keluarga', 'Internet + Bonus'];
+const PAKET_KATEGORI = ['Internet Only', 'Internet + TV + Kuota Keluarga', 'Per Bulan', 'Hemat 4 Bulan (Bayar di Muka)'];
 
 
 /** Pilih ikon benefit dari isi teksnya. */
@@ -232,6 +232,7 @@ function icon(string $name, int $size = 26): string
         'cable'   => '<path d="M4 20c4 0 4-6 8-6s4 6 8 6"/><path d="M8 4v4M16 4v4"/><rect x="6" y="8" width="12" height="6" rx="2"/>',
         'modem'   => '<rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 16.5h.01M11 16.5h.01"/><path d="M8.5 9.5a5 5 0 0 1 7 0M6 7a8.5 8.5 0 0 1 12 0"/>',
         'phone-call' => '<path d="M5 4h3.5l1.8 4.4-2.3 1.4a11 11 0 0 0 6.2 6.2l1.4-2.3L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4Z"/><path d="M14.5 3.5a6 6 0 0 1 6 6M14.5 7a2.5 2.5 0 0 1 2.5 2.5"/>',
+        'signal'  => '<path d="M4 20v-3M9 20v-6M14 20v-9M19 20V5"/>',
         'laptop'  => '<rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/>',
         'plug'    => '<path d="M9 3v5M15 3v5"/><path d="M6 8h12v3a6 6 0 0 1-12 0Z"/><path d="M12 17v4"/>',
         'share'   => '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/>',
@@ -428,14 +429,14 @@ function render_bantuan(): void
 function render_fwa_keunggulan(): void
 {
     $kiri = [
-        ['wifi', 'Tanpa Kabel', 'Tidak perlu tarik kabel ke rumah, cukup pakai modem.'],
-        ['bolt', 'Aktivasi Cepat', 'Modem datang, colok, langsung bisa online.'],
-        ['plug', 'Cukup Colok Listrik', 'Pemasangan simpel, tanpa bongkar dinding.'],
+        ['signal', 'Jaringan 5G', 'Internet rumah memakai jaringan 5G yang cepat dan stabil.'],
+        ['infinity', 'Unlimited tanpa FUP', 'Internetan sepuasnya, kecepatan tidak diturunkan.'],
+        ['wifi', 'Tanpa Tarik Kabel', 'Cocok untuk alamat yang belum tercover jaringan kabel.'],
     ];
     $kanan = [
-        ['tv', 'Streaming HD', 'Nonton film dan video favorit dengan lancar.'],
-        ['game', 'Gaming', 'Main game online bareng teman tanpa ribet.'],
-        ['laptop', 'WFH Online', 'Kerja dan sekolah online dari rumah.'],
+        ['tv', 'Free Vidio Lite 3 Bulan', 'Nonton film, series, dan olahraga favorit.'],
+        ['gift', 'Free CATCHPLAY+ 3 Bulan', 'Akses film-film pilihan tanpa biaya tambahan.'],
+        ['router', 'Memakai 2 Alat', 'Perangkat outdoor dan indoor untuk sinyal lebih maksimal.'],
     ];
     $item = function (array $it): void {
         [$ic, $t, $d] = $it; ?>
