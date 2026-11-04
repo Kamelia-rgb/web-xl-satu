@@ -8,12 +8,7 @@ if (!$lead) {
 // Tampil sekali saja, supaya konversi iklan tidak terhitung dua kali saat halaman dimuat ulang.
 unset($_SESSION['lead_done']);
 
-$message = "Halo, saya baru saja mengisi formulir pendaftaran di website.\n"
-    . 'Nama: ' . $lead['nama'] . "\n"
-    . 'Alamat: ' . $lead['alamat'] . "\n"
-    . (!empty($lead['lokasi']) ? 'Lokasi: ' . $lead['lokasi'] . "\n" : '')
-    . ($lead['paket'] ? 'Paket: ' . $lead['paket'] . "\n" : '')
-    . 'Mohon dibantu cek area dan proses pemasangannya. Terima kasih.';
+$message = wa_message_lead($lead);
 
 $page = [
     'title'   => 'Terima Kasih',
@@ -35,7 +30,7 @@ require __DIR__ . '/includes/header.php';
       <div class="wa-auto-bar"><span></span></div>
     </div>
     <p class="note">Kalau WhatsApp tidak terbuka otomatis, tekan tombol ini:</p>
-    <a class="btn btn-wa" href="<?= e(wa_link($message)) ?>" data-track="wa">Kirim ke WhatsApp Sales</a>
+    <a class="btn btn-wa" href="<?= e(wa_link($message)) ?>" data-track="wa" data-no-form>Kirim ke WhatsApp Sales</a>
     <p class="mt-2"><a href="<?= e(url()) ?>">Kembali ke beranda</a></p>
   </div>
 </section>

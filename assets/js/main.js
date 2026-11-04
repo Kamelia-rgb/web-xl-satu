@@ -70,6 +70,8 @@
   document.addEventListener('click', function (ev) {
     var link = ev.target.closest('[data-track="wa"]');
     if (!link) return;
+    // Link yang membuka formulir WA dilacak saat formulir dikirim, bukan saat diklik.
+    if (document.getElementById('wa-modal') && !link.hasAttribute('data-no-form')) return;
     var label = link.getAttribute('data-paket') || '';
     if (typeof window.gtag === 'function') {
       window.gtag('event', 'klik_whatsapp', { paket: label });
@@ -206,11 +208,10 @@ document.querySelectorAll('[data-pkg-filter]').forEach(function (wrap) {
 })();
 
 // ---------- Formulir: ambil lokasi otomatis (GPS) ----------
-(function () {
-  var btn = document.querySelector('[data-geo]');
-  var input = document.getElementById('lokasi');
-  var status = document.querySelector('[data-geo-status]');
-  if (!btn || !input) return;
+document.querySelectorAll('[data-geo]').forEach(function (btn) {
+  var input = document.getElementById(btn.getAttribute('data-geo-target') || 'lokasi');
+  var status = btn.parentElement.querySelector('[data-geo-status]');
+  if (!input) return;
   function say(text, cls) { if (status) { status.textContent = text; status.className = 'hint' + (cls ? ' ' + cls : ''); } }
   btn.addEventListener('click', function () {
     if (!('geolocation' in navigator) || !window.isSecureContext) {
@@ -228,5 +229,84 @@ document.querySelectorAll('[data-pkg-filter]').forEach(function (wrap) {
       say('Lokasi tidak bisa diambil (akses ditolak / GPS mati). Boleh dikosongkan atau tempel link Google Maps.', 'err');
       btn.disabled = false;
     }, { enableHighAccuracy: true, timeout: 15000 });
+  });
+});
+
+
+// ---------- Tombol WhatsApp: tampilkan formulir singkat dulu ----------
+(function () {
+  var modal = document.getElementById('wa-modal');
+  if (!modal) return;
+  var form = modal.querySelector('form');
+  var submit = form.querySelector('button[type="submit"]');
+  var boxErr = form.querySelector('.wa-form-error');
+  var select = form.querySelector('select[name="paket_id"]');
+  var lastFocus = null;
+
+  function open(label) {
+    lastFocus = document.activeElement;
+    select.value = '0';
+    if (label) {
+      Array.prototype.forEach.call(select.options, function (o) { if (o.getAttribute('data-judul') === label) select.value = o.value; });
+    }
+    modal.hidden = false;
+    document.body.classList.add('modal-open');
+    setTimeout(function () { var f = form.querySelector('#wa-nama'); if (f) f.focus(); }, 60);
+  }
+  function close() {
+    modal.hidden = true;
+    document.body.classList.remove('modal-open');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  function showErrors(errors, message) {
+    form.querySelectorAll('[data-err]').forEach(function (p) {
+      var msg = errors && errors[p.getAttribute('data-err')];
+      p.textContent = msg || '';
+      p.hidden = !msg;
+      var row = p.closest('.form-row'); if (row) row.classList.toggle('has-error', !!msg);
+    });
+    boxErr.textContent = message || '';
+    boxErr.hidden = !message;
+  }
+  function track() {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'generate_lead', { metode: 'form_wa' });
+      if (window.SITE && window.SITE.adsConversion) window.gtag('event', 'conversion', { send_to: window.SITE.adsConversion });
+    }
+    if (typeof window.fbq === 'function') window.fbq('track', 'Lead');
+  }
+
+  document.addEventListener('click', function (ev) {
+    var link = ev.target.closest('a[data-track="wa"]');
+    if (!link || link.hasAttribute('data-no-form') || ev.ctrlKey || ev.metaKey || ev.shiftKey) return;
+    ev.preventDefault();
+    open(link.getAttribute('data-paket') || '');
+  });
+  modal.addEventListener('click', function (ev) { if (ev.target.closest('[data-wa-close]')) close(); });
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && !modal.hidden) close(); });
+
+  form.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    showErrors(null, '');
+    submit.disabled = true;
+    var oldText = submit.innerHTML;
+    submit.textContent = 'Mengirim…';
+    fetch(form.getAttribute('action'), { method: 'POST', body: new FormData(form), credentials: 'same-origin' })
+      .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+      .then(function (res) {
+        if (res && res.ok && res.wa) {
+          track();
+          submit.textContent = 'Membuka WhatsApp…';
+          window.location.href = res.wa;
+          setTimeout(function () { submit.disabled = false; submit.innerHTML = oldText; close(); form.reset(); }, 1500);
+          return;
+        }
+        showErrors(res && res.errors, res && res.message ? res.message : (res && res.errors ? 'Ada data yang belum benar, silakan cek kembali.' : 'Gagal mengirim. Coba lagi atau pakai "Langsung chat saja".'));
+        submit.disabled = false; submit.innerHTML = oldText;
+      })
+      .catch(function () {
+        showErrors(null, 'Koneksi bermasalah. Coba lagi atau pakai "Langsung chat saja".');
+        submit.disabled = false; submit.innerHTML = oldText;
+      });
   });
 })();

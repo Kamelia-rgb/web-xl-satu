@@ -48,6 +48,8 @@
   <a class="btn btn-wa" href="<?= e(wa_link('Halo, saya mau daftar internet ' . config('site_name') . '. Boleh dibantu?')) ?>" target="_blank" rel="noopener" data-track="wa" tabindex="-1">Daftar Sebelum Terlambat!</a>
 </div>
 
+<?php render_wa_modal(); ?>
+
 <script src="<?= e(asset('assets/js/main.js')) ?>" defer></script>
 </body>
 </html>

@@ -475,3 +475,125 @@ function render_fwa_keunggulan(): void
     <?php
 }
 
+
+/**
+ * Cek & simpan data calon pelanggan (dipakai formulir Kontak dan formulir WhatsApp).
+ * Mengembalikan ['errors' => [...], 'lead' => [...]] — lead berisi data untuk pesan WhatsApp.
+ */
+function proses_lead(array $in, array $paketById, string $via = ''): array
+{
+    ensure_leads_lokasi();
+    $v = function (string $k) use ($in): string { return trim((string) ($in[$k] ?? '')); };
+    $nama = $v('nama'); $alamat = $v('alamat'); $kota = $v('kota'); $catatan = $v('catatan');
+    $phone = normalize_phone($v('no_wa'));
+    $errors = [];
+    if (mb_strlen($nama) < 2 || mb_strlen($nama) > 100) {
+        $errors['nama'] = 'Isi nama lengkap.';
+    }
+    if (!preg_match('/^628\d{7,12}$/', $phone)) {
+        $errors['no_wa'] = 'Nomor WhatsApp tidak valid. Contoh: 0812 3456 7890';
+    }
+    if (mb_strlen($alamat) < 10) {
+        $errors['alamat'] = 'Tulis alamat pemasangan selengkap mungkin.';
+    }
+    if (mb_strlen($kota) > 100 || mb_strlen($catatan) > 1000 || mb_strlen($alamat) > 1000) {
+        $errors['catatan'] = 'Teks terlalu panjang.';
+    }
+    $lokasi = normalize_lokasi($v('lokasi'));
+    if ($lokasi === null) {
+        $errors['lokasi'] = 'Isi dengan link Google Maps atau tekan tombol "Ambil lokasi saya otomatis". Boleh dikosongkan.';
+    }
+    if ($errors) {
+        return ['errors' => $errors, 'lead' => null];
+    }
+
+    $selected = $paketById[(int) $v('paket_id')] ?? null;
+    $isBot = $v('website') !== '';  // jebakan bot: kolom tersembunyi harus kosong
+    // Kirim ulang dalam 30 detik tidak disimpan dua kali, tapi tetap dilanjutkan.
+    $duplikat = !empty($_SESSION['last_lead_at']) && time() - $_SESSION['last_lead_at'] < 30;
+
+    if (!$isBot && !$duplikat) {
+        $sumber = trim(($_SESSION['sumber'] ?? '') . ($via !== '' ? ' · ' . $via : ''), ' ·');
+        $stmt = db()->prepare('INSERT INTO leads (nama, no_wa, alamat, kota, lokasi, paket_id, paket_nama, catatan, sumber, status, created_at)
+                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $stmt->execute([
+            $nama, $phone, $alamat, $kota ?: null, $lokasi ?: null,
+            $selected['id'] ?? null,
+            $selected ? paket_judul($selected) . ' (' . paket_jenis($selected) . ', ' . $selected['kategori'] . ')' : null,
+            $catatan ?: null,
+            $sumber !== '' ? mb_substr($sumber, 0, 100) : null,
+            'baru',
+            date('Y-m-d H:i:s'),
+        ]);
+    }
+    $_SESSION['last_lead_at'] = time();
+
+    return ['errors' => [], 'lead' => [
+        'nama'   => $nama,
+        'alamat' => $alamat . ($kota ? ', ' . $kota : ''),
+        'lokasi' => (string) $lokasi,
+        'paket'  => $selected ? paket_judul($selected) . ' – ' . rupiah($selected['harga']) . periode_label($selected) : '',
+    ]];
+}
+
+/** Pesan WhatsApp ke sales berisi data calon pelanggan. */
+function wa_message_lead(array $lead): string
+{
+    return "Halo, saya mau daftar internet " . config('site_name') . ".\n"
+        . 'Nama: ' . $lead['nama'] . "\n"
+        . 'Alamat: ' . $lead['alamat'] . "\n"
+        . (!empty($lead['lokasi']) ? 'Lokasi: ' . $lead['lokasi'] . "\n" : '')
+        . (!empty($lead['paket']) ? 'Paket: ' . $lead['paket'] . "\n" : '')
+        . 'Mohon dibantu cek area dan proses pemasangannya. Terima kasih.';
+}
+
+/** Jendela formulir singkat yang muncul saat tombol WhatsApp ditekan. */
+function render_wa_modal(): void
+{
+    try {
+        $paket = get_paket();
+    } catch (Throwable $ex) {
+        $paket = [];
+    }
+    $wa = (string) config('wa_display');
+    ?>
+    <div class="wa-modal" id="wa-modal" hidden>
+      <div class="wa-modal-backdrop" data-wa-close></div>
+      <div class="wa-modal-box" role="dialog" aria-modal="true" aria-labelledby="wa-modal-title">
+        <button type="button" class="wa-modal-x" data-wa-close aria-label="Tutup">&times;</button>
+        <div class="wa-modal-head">
+          <span class="wa-modal-icon"><?= icon('chat', 26) ?></span>
+          <div>
+            <h2 id="wa-modal-title">Chat Sales via WhatsApp</h2>
+            <p>Isi data singkat ini, lalu WhatsApp langsung terbuka ke <?= e($wa) ?>.</p>
+          </div>
+        </div>
+        <form class="wa-form" action="<?= e(url('daftar-wa.php')) ?>" method="post" novalidate>
+          <?= csrf_field() ?>
+          <div class="hp-field" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+          <div class="form-row"><label for="wa-nama">Nama lengkap <span class="req">*</span></label><input type="text" id="wa-nama" name="nama" autocomplete="name" maxlength="100" required><p class="field-error" data-err="nama" hidden></p></div>
+          <div class="form-row"><label for="wa-nowa">Nomor WhatsApp <span class="req">*</span></label><input type="tel" id="wa-nowa" name="no_wa" autocomplete="tel" inputmode="tel" placeholder="0812 3456 7890" maxlength="20" required><p class="field-error" data-err="no_wa" hidden></p></div>
+          <div class="form-row"><label for="wa-alamat">Alamat pemasangan <span class="req">*</span></label><textarea id="wa-alamat" name="alamat" rows="2" maxlength="1000" placeholder="Nama jalan, nomor rumah, kelurahan, kota" required></textarea><p class="field-error" data-err="alamat" hidden></p></div>
+          <div class="form-row">
+            <label for="wa-lokasi">Titik lokasi rumah <span class="optional">(opsional)</span></label>
+            <input type="text" id="wa-lokasi" name="lokasi" maxlength="255" placeholder="Link Google Maps / share location" inputmode="url">
+            <button type="button" class="loc-btn" data-geo data-geo-target="wa-lokasi">📍 Ambil lokasi saya otomatis</button>
+            <p class="hint" data-geo-status></p>
+            <p class="field-error" data-err="lokasi" hidden></p>
+          </div>
+          <div class="form-row"><label for="wa-paket">Paket yang diminati</label>
+            <select id="wa-paket" name="paket_id">
+              <option value="0">Belum tahu / minta saran</option>
+              <?php foreach ($paket as $p): ?>
+                <option value="<?= (int) $p['id'] ?>" data-judul="<?= e(paket_judul($p)) ?>"><?= e(paket_judul($p) . ' – ' . rupiah($p['harga']) . periode_label($p)) ?></option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <p class="alert alert-error wa-form-error" hidden></p>
+          <button type="submit" class="btn btn-wa btn-block btn-lg"><?= icon('chat', 20) ?> Lanjut ke WhatsApp</button>
+          <a class="wa-skip" href="<?= e(wa_link('Halo, saya mau tanya-tanya soal internet ' . config('site_name') . '.')) ?>" target="_blank" rel="noopener" data-track="wa" data-no-form>Langsung chat saja tanpa isi form →</a>
+        </form>
+      </div>
+    </div>
+    <?php
+}

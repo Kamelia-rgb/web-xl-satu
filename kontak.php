@@ -14,60 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach ($old as $key => $_) {
         $old[$key] = trim((string) ($_POST[$key] ?? ''));
     }
-
-    // Jebakan bot: kolom tersembunyi ini harus kosong.
-    $isBot = trim((string) ($_POST['website'] ?? '')) !== '';
-    // Cegah kirim berulang-ulang dalam waktu singkat.
-    $tooFast = !empty($_SESSION['last_lead_at']) && time() - $_SESSION['last_lead_at'] < 30;
-
-    $phone = normalize_phone($old['no_wa']);
-    if (mb_strlen($old['nama']) < 2 || mb_strlen($old['nama']) > 100) {
-        $errors['nama'] = 'Isi nama lengkap.';
-    }
-    if (!preg_match('/^628\d{7,12}$/', $phone)) {
-        $errors['no_wa'] = 'Nomor WhatsApp tidak valid. Contoh: 0812 3456 7890';
-    }
-    if (mb_strlen($old['alamat']) < 10) {
-        $errors['alamat'] = 'Tulis alamat pemasangan selengkap mungkin.';
-    }
-    if (mb_strlen($old['kota']) > 100 || mb_strlen($old['catatan']) > 1000 || mb_strlen($old['alamat']) > 1000) {
-        $errors['catatan'] = 'Teks terlalu panjang.';
-    }
-    $lokasi = normalize_lokasi($old['lokasi']);
-    if ($lokasi === null) {
-        $errors['lokasi'] = 'Isi dengan link Google Maps atau tekan tombol "Ambil lokasi saya otomatis". Boleh dikosongkan.';
-    }
-    $selected = $paketById[(int) $old['paket_id']] ?? null;
-
-    if ($tooFast) {
-        $errors['form'] = 'Data kamu sudah kami terima. Tunggu sebentar sebelum mengirim lagi, atau langsung chat kami via WhatsApp.';
-    }
-
+    $hasil = proses_lead($_POST, $paketById);
+    $errors = $hasil['errors'];
     if (!$errors) {
-        if (!$isBot) {
-            $stmt = db()->prepare('INSERT INTO leads (nama, no_wa, alamat, kota, lokasi, paket_id, paket_nama, catatan, sumber, status, created_at)
-                                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $stmt->execute([
-                $old['nama'],
-                $phone,
-                $old['alamat'],
-                $old['kota'] ?: null,
-                $lokasi ?: null,
-                $selected['id'] ?? null,
-                $selected ? paket_judul($selected) . ' (' . paket_jenis($selected) . ', ' . $selected['kategori'] . ')' : null,
-                $old['catatan'] ?: null,
-                $_SESSION['sumber'] ?? null,
-                'baru',
-                date('Y-m-d H:i:s'),
-            ]);
-        }
-        $_SESSION['last_lead_at'] = time();
-        $_SESSION['lead_done'] = [
-            'nama'   => $old['nama'],
-            'alamat' => $old['alamat'] . ($old['kota'] ? ', ' . $old['kota'] : ''),
-            'lokasi' => (string) $lokasi,
-            'paket'  => $selected ? paket_judul($selected) . ' – ' . rupiah($selected['harga']) . periode_label($selected) : '',
-        ];
+        $_SESSION['lead_done'] = $hasil['lead'];
         redirect('terima-kasih');
     }
 }
