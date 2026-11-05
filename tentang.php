@@ -20,7 +20,7 @@ require __DIR__ . '/includes/header.php';
 <section class="section">
   <div class="container prose">
     <h2>Siapa kami</h2>
-    <p><strong><?= e(nama_usaha()) ?></strong> adalah website milik <strong><?= e(nama_sales()) ?></strong>, sales <strong>mitra penjualan</strong> layanan internet rumah <?= e(config('site_name')) ?> yang berkantor di <?= e(kantor_sales()) ?>. Kami melayani pendaftaran untuk area <?= e(config('area_layanan')) ?>.</p>
+    <p><strong><?= e(nama_usaha()) ?></strong> adalah website yang dikelola oleh <?= e(nama_sales()) ?> <strong>mitra penjualan</strong> layanan internet rumah <?= e(config('site_name')) ?>, berkantor di <?= e(kantor_sales()) ?>. Kami melayani pendaftaran untuk area <?= e(config('area_layanan')) ?>.</p>
 
     <div class="notice-box">
       <strong>Website ini bukan situs resmi XL.</strong> Kami adalah mitra penjualan yang membantu pendaftaran pelanggan baru. Layanan internet, pemasangan, dan tagihan disediakan langsung oleh XL. Informasi resmi produk dapat kamu cek di website dan aplikasi resmi XL.
@@ -36,7 +36,6 @@ require __DIR__ . '/includes/header.php';
 
     <h2>Hubungi kami</h2>
     <ul>
-      <li>Sales: <?= e(nama_sales()) ?></li>
       <li>Alamat kantor: <?= e(alamat_kantor()) ?></li>
       <li>WhatsApp: <a href="<?= e(wa_link()) ?>" target="_blank" rel="noopener" data-track="wa"><?= e(config('wa_display')) ?></a></li>
       <?php if (config('email')): ?><li>Email: <a href="mailto:<?= e(config('email')) ?>"><?= e(config('email')) ?></a></li><?php endif; ?>

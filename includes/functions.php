@@ -325,7 +325,7 @@ function nama_usaha(): string
 
 function nama_sales(): string
 {
-    return (string) config('nama_sales', 'Putra');
+    return (string) config('nama_sales', 'tim sales marketing');
 }
 
 function kantor_sales(): string

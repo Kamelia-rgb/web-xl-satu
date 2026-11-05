@@ -53,7 +53,7 @@ $cls = function (string $f) use ($errors): string {
       <ul class="info-list">
         <li>
           <span class="feature-icon"><?= icon('users') ?></span>
-          <div><strong>Sales</strong><?= e(nama_sales()) ?>, mitra penjualan <?= e(config('site_name')) ?><br><small><?= e(alamat_kantor()) ?></small></div>
+          <div><strong>Kantor sales</strong>Mitra penjualan <?= e(config('site_name')) ?><br><small><?= e(alamat_kantor()) ?></small></div>
         </li>
         <li>
           <span class="feature-icon"><?= icon('chat') ?></span>
