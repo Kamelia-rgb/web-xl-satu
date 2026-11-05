@@ -13,6 +13,7 @@ return [
     // Identitas penjual: penting supaya iklan Google/Meta tidak ditolak
     'nama_sales'   => 'Putra',
     'kantor_sales' => 'Galaxy, Bekasi',
+    'alamat_kantor'=> 'Jl. Taman Akasia Blok H2, RT 002/RW 014, Jaka Setia, Kec. Bekasi Selatan, Kota Bekasi, Jawa Barat 17147',
     // Alamat lengkap website, TANPA garis miring di akhir
     'base_url'     => 'https://domainkamu.com',
 

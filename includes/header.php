@@ -57,6 +57,14 @@ $pixel = (string) config('meta_pixel_id');
     'description'=> 'Mitra penjualan layanan internet rumah ' . $siteName . ' (bukan situs resmi XL). Sales: ' . nama_sales() . ', kantor ' . kantor_sales() . '.',
     'url'        => absolute_url(),
     'telephone'  => '+' . config('wa_number'),
+    'address'    => [
+        '@type'           => 'PostalAddress',
+        'streetAddress'   => 'Jl. Taman Akasia Blok H2, RT 002/RW 014, Jaka Setia',
+        'addressLocality' => 'Bekasi Selatan, Kota Bekasi',
+        'addressRegion'   => 'Jawa Barat',
+        'postalCode'      => '17147',
+        'addressCountry'  => 'ID',
+    ],
     'areaServed' => config('area_layanan'),
     'image'      => $ogImage,
 ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>

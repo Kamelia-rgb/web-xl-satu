@@ -37,7 +37,7 @@ require __DIR__ . '/includes/header.php';
     <h2>Hubungi kami</h2>
     <ul>
       <li>Sales: <?= e(nama_sales()) ?></li>
-      <li>Kantor: <?= e(kantor_sales()) ?></li>
+      <li>Alamat kantor: <?= e(alamat_kantor()) ?></li>
       <li>WhatsApp: <a href="<?= e(wa_link()) ?>" target="_blank" rel="noopener" data-track="wa"><?= e(config('wa_display')) ?></a></li>
       <?php if (config('email')): ?><li>Email: <a href="mailto:<?= e(config('email')) ?>"><?= e(config('email')) ?></a></li><?php endif; ?>
       <li>Jam layanan: <?= e(config('jam_layanan')) ?></li>
