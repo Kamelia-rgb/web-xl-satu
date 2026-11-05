@@ -5,10 +5,11 @@
  */
 $page = $page ?? [];
 $siteName = config('site_name');
-$title = !empty($page['title']) ? $page['title'] . ' | ' . $siteName : $siteName . ' – ' . config('tagline');
+$usaha = nama_usaha();
+$title = !empty($page['title']) ? $page['title'] . ' | ' . $usaha : $usaha . ' – Pasang Internet Rumah ' . $siteName;
 $description = $page['description'] ?? 'Pasang internet rumah ' . $siteName . ' cepat dan stabil. Lihat paket, promo terbaru, dan daftar pemasangan langsung via WhatsApp.';
 $canonical = absolute_url($page['path'] ?? '');
-$active = $page['active'] ?? '';
+$active = $page['active'] ?? null;
 $ogImage = absolute_url('assets/img/og-image.png');
 
 $nav = [
@@ -34,7 +35,7 @@ $pixel = (string) config('meta_pixel_id');
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="id_ID">
-<meta property="og:site_name" content="<?= e($siteName) ?>">
+<meta property="og:site_name" content="<?= e($usaha) ?>">
 <meta property="og:title" content="<?= e($title) ?>">
 <meta property="og:description" content="<?= e($description) ?>">
 <meta property="og:url" content="<?= e($canonical) ?>">
@@ -52,7 +53,8 @@ $pixel = (string) config('meta_pixel_id');
 <script type="application/ld+json"><?= json_encode([
     '@context'   => 'https://schema.org',
     '@type'      => 'LocalBusiness',
-    'name'       => $siteName,
+    'name'       => $usaha,
+    'description'=> 'Mitra penjualan layanan internet rumah ' . $siteName . ' (bukan situs resmi XL). Sales: ' . nama_sales() . ', kantor ' . kantor_sales() . '.',
     'url'        => absolute_url(),
     'telephone'  => '+' . config('wa_number'),
     'areaServed' => config('area_layanan'),
@@ -86,10 +88,17 @@ fbq('track', 'PageView');
 <body>
 <a class="skip-link" href="#konten">Lewati ke konten</a>
 
+<div class="mitra-bar">
+  <div class="container">
+    Website <strong><?= e($usaha) ?></strong> dikelola oleh <?= e(nama_sales()) ?>, mitra penjualan <?= e($siteName) ?> (kantor <?= e(kantor_sales()) ?>). Bukan situs resmi XL. <a href="<?= e(url('tentang')) ?>">Tentang kami</a>
+  </div>
+</div>
+
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="<?= e(url()) ?>" aria-label="<?= e($siteName) ?> – Beranda">
+    <a class="brand" href="<?= e(url()) ?>" aria-label="<?= e($usaha) ?> – Beranda">
       <img class="brand-logo" src="<?= e(asset('assets/img/logo-xl-satu.png')) ?>" alt="<?= e($siteName) ?>" width="123" height="36">
+      <span class="brand-mitra"><b><?= e($usaha) ?></b><small>Mitra Penjualan</small></span>
     </a>
 
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-utama">

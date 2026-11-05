@@ -18,7 +18,7 @@ require __DIR__ . '/includes/header.php';
 
 <section class="section">
   <div class="container prose">
-    <p>Kebijakan ini menjelaskan bagaimana kami, pengelola website <?= e(config('site_name')) ?>, mengumpulkan dan menggunakan data pengunjung.</p>
+    <p>Kebijakan ini menjelaskan bagaimana kami, <?= e(nama_usaha()) ?> (dikelola oleh <?= e(nama_sales()) ?>, mitra penjualan <?= e(config('site_name')) ?>), mengumpulkan dan menggunakan data pengunjung.</p>
 
     <h2>Data yang kami kumpulkan</h2>
     <p>Saat kamu mengisi formulir pendaftaran, kami menyimpan nama, nomor WhatsApp, alamat pemasangan, paket yang diminati, dan catatan yang kamu tulis. Kami juga dapat mencatat sumber kunjungan (misalnya iklan yang kamu klik).</p>

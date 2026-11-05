@@ -52,6 +52,10 @@ $cls = function (string $f) use ($errors): string {
       <h2>Hubungi sales kami</h2>
       <ul class="info-list">
         <li>
+          <span class="feature-icon"><?= icon('users') ?></span>
+          <div><strong>Sales</strong><?= e(nama_sales()) ?>, mitra penjualan <?= e(config('site_name')) ?> · Kantor <?= e(kantor_sales()) ?></div>
+        </li>
+        <li>
           <span class="feature-icon"><?= icon('chat') ?></span>
           <div><strong>WhatsApp</strong><a href="<?= e(wa_link()) ?>" target="_blank" rel="noopener" data-track="wa"><?= e(config('wa_display')) ?></a></div>
         </li>

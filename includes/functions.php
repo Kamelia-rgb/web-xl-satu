@@ -316,3 +316,19 @@ const LEAD_STATUS = [
     'terpasang' => 'Terpasang',
     'batal'     => 'Batal',
 ];
+
+/** Nama usaha penjual (bukan merek XL), untuk judul tab, footer, dan data Google. */
+function nama_usaha(): string
+{
+    return (string) config('nama_usaha', 'Daftar XL Home');
+}
+
+function nama_sales(): string
+{
+    return (string) config('nama_sales', 'Putra');
+}
+
+function kantor_sales(): string
+{
+    return (string) config('kantor_sales', 'Galaxy, Bekasi');
+}

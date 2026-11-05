@@ -8,6 +8,11 @@ return [
     // ---- Identitas ----
     'site_name'    => 'XL SATU',
     'tagline'      => 'Internet Rumah Cepat & Stabil',
+    // Nama usaha/website penjual (tampil di judul tab, footer, dan Google)
+    'nama_usaha'   => 'Daftar XL Home',
+    // Identitas penjual: penting supaya iklan Google/Meta tidak ditolak
+    'nama_sales'   => 'Putra',
+    'kantor_sales' => 'Galaxy, Bekasi',
     // Alamat lengkap website, TANPA garis miring di akhir
     'base_url'     => 'https://domainkamu.com',
 

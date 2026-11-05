@@ -79,6 +79,16 @@ p { margin: 0 0 1em; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--primary); font-weight: 800; font-size: 1.25rem; }
 .brand-logo { display: block; height: 36px; width: auto; }
 .footer-brand img { height: 40px; width: auto; }
+.brand-mitra { display: flex; flex-direction: column; line-height: 1.15; padding-left: 10px; border-left: 2px solid var(--border); }
+.brand-mitra b { font-size: .95rem; color: var(--primary); font-weight: 800; }
+.brand-mitra small { font-size: .72rem; color: #5b6475; font-weight: 600; letter-spacing: .02em; }
+
+/* Keterangan mitra penjualan (di atas header) */
+.mitra-bar { background: #0a1730; color: rgba(255,255,255,.85); font-size: .8rem; line-height: 1.45; padding: 6px 0; text-align: center; }
+.mitra-bar strong { color: #fff; }
+.mitra-bar a { color: #ffd166; font-weight: 700; white-space: nowrap; }
+
+.notice-box { background: #fff7e0; border: 1px solid #f2d27a; border-left: 4px solid var(--accent); border-radius: 10px; padding: 14px 16px; margin: 18px 0; }
 
 .nav-toggle { display: none; background: none; border: 0; padding: 10px; cursor: pointer; }
 .nav-toggle .bar { display: block; width: 24px; height: 2.5px; background: var(--text); margin: 5px 0; border-radius: 2px; transition: .2s; }
@@ -728,4 +738,9 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 560px) {
   .wa-modal { align-items: flex-end; padding: 0; }
   .wa-modal-box { max-width: none; border-radius: 22px 22px 0 0; max-height: 92vh; padding: 20px 16px calc(16px + env(safe-area-inset-bottom)); }
+}
+
+@media (max-width: 380px) {
+  .brand-logo { height: 30px; }
+  .brand-mitra b { font-size: .85rem; }
 }

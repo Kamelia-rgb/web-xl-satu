@@ -3,7 +3,7 @@ require __DIR__ . '/includes/bootstrap.php';
 
 header('Content-Type: application/xml; charset=utf-8');
 
-$pages = ['' => '1.0', 'paket' => '0.9', 'promo' => '0.9', 'layanan' => '0.8', 'kontak' => '0.8', 'kebijakan-privasi' => '0.3'];
+$pages = ['' => '1.0', 'paket' => '0.9', 'promo' => '0.9', 'layanan' => '0.8', 'kontak' => '0.8', 'tentang' => '0.5', 'kebijakan-privasi' => '0.3'];
 
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";

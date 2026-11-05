@@ -4,7 +4,7 @@
   <div class="container footer-grid">
     <div>
       <p class="footer-brand"><img src="<?= e(asset('assets/img/logo-xl-satu-putih.png')) ?>" alt="<?= e(config('site_name')) ?>" width="136" height="40" loading="lazy"></p>
-      <p><?= e(config('tagline')) ?>. Layanan pemasangan untuk area <?= e(config('area_layanan')) ?>.</p>
+      <p><strong style="color:#fff"><?= e(nama_usaha()) ?></strong>, mitra penjualan <?= e(config('site_name')) ?>. Dikelola oleh <?= e(nama_sales()) ?> (kantor <?= e(kantor_sales()) ?>). Layanan pemasangan untuk area <?= e(config('area_layanan')) ?>.</p>
     </div>
     <div>
       <p class="footer-title">Menu</p>
@@ -13,6 +13,7 @@
         <li><a href="<?= e(url('paket')) ?>">Paket Internet</a></li>
         <li><a href="<?= e(url('promo')) ?>">Promo</a></li>
         <li><a href="<?= e(url('kontak')) ?>">Kontak &amp; Pemasangan</a></li>
+        <li><a href="<?= e(url('tentang')) ?>">Tentang Kami</a></li>
         <li><a href="<?= e(url('kebijakan-privasi')) ?>">Kebijakan Privasi</a></li>
       </ul>
     </div>
@@ -28,7 +29,7 @@
   </div>
   <div class="container footer-bottom">
     <p class="disclaimer"><?= e(config('disclaimer')) ?></p>
-    <p>&copy; <?= date('Y') ?> <?= e(config('site_name')) ?></p>
+    <p>&copy; <?= date('Y') ?> <?= e(nama_usaha()) ?> · Mitra penjualan <?= e(config('site_name')) ?>. Merek XL dan XL SATU adalah milik pemilik mereknya.</p>
   </div>
 </footer>
 
